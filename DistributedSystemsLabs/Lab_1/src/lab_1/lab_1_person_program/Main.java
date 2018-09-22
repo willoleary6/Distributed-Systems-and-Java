@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package distributedsystemslabs.lab_1_person_program;
+package Lab_1.lab_1_person_program;
 import java.util.List;
 /**
  *
