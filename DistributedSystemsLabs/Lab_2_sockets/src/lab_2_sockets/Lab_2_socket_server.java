@@ -72,7 +72,7 @@ public class Lab_2_socket_server extends JFrame implements ActionListener {
             System.out.println("Accept failed: 4444");
             System.exit(-1);
         }
-
+ 
         while(true) {
             try {
                 line = in.readLine();
@@ -98,6 +98,7 @@ public class Lab_2_socket_server extends JFrame implements ActionListener {
                             }
                         }
                         if(validOperator){
+                            
                             String answer = "";
                             String operator = operation[0];
                             switch(operator.toUpperCase()){
@@ -121,7 +122,7 @@ public class Lab_2_socket_server extends JFrame implements ActionListener {
                                     answer = "Error";
                                     break;
                             }
-                            out.println(answer);
+                            line = answer;
                         }
                     }
                 }

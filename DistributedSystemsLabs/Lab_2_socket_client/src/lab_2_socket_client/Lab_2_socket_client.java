@@ -62,7 +62,7 @@ class lab_2_socket_client extends JFrame implements ActionListener {
     public void listenSocket() {
         //Create socket connection
         try {
-            socket = new Socket("10.100.106.41", 4444);
+            socket = new Socket("192.168.1.53", 4444);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (UnknownHostException e) {
