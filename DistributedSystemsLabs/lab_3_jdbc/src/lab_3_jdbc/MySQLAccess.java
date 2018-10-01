@@ -75,7 +75,7 @@ public class MySQLAccess {
       int i = 1;
         for (Object arg : args) {         
              if (arg instanceof Date) {
-            preparedStatement.setTimestamp(i++, new Timestamp(((Date) arg).getTime()));
+                preparedStatement.setDate(i++, (java.sql.Date) arg);
             } else if (arg instanceof Integer) {
                 preparedStatement.setInt(i++, (Integer) arg);
             } else if (arg instanceof Long) {
@@ -104,10 +104,6 @@ public class MySQLAccess {
           System.out.println("Unable to delete from database");
           System.out.println(e);
       }
-  }
-  
-  public void readDataBase() throws Exception {
-    
   }
 
 private void writeMetaData(ResultSet resultSet) throws SQLException {
