@@ -71,9 +71,9 @@ public class client extends JFrame implements ActionListener{
         this.addWindowListener(l);
         this.pack();
         this.setVisible(true);
+        this.listenSocket();
         
-        
-	this.listenSocket();
+	
     }
     
     public void actionPerformed(ActionEvent event) {
@@ -91,6 +91,17 @@ public class client extends JFrame implements ActionListener{
                 System.out.println("Read failed");
                 System.exit(1);
             }
+        }
+    }
+    private void closeSocket() {
+        //Clean up
+        try {
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Could not close.");
+            System.exit(-1);
         }
     }
     

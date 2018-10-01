@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,13 +37,13 @@ public class server extends JFrame implements ActionListener{
     private JPanel panel;
     private JTextArea textArea = new JTextArea();
     private ServerSocket server = null;
-    private Socket client = null;
     private BufferedReader in = null;
     private PrintWriter out = null;
     private String line;
     private Thread listenerThread;
     private int portNumber;
-    
+    private Socket client = null;
+    private ArrayList<serverConnection> connections = new ArrayList<serverConnection>();
     
     public server(int portNumber){
        this.portNumber = portNumber;
@@ -95,14 +96,18 @@ public class server extends JFrame implements ActionListener{
             System.out.println("Could not listen on port "+portNumber);
             System.exit(-1);
         }
-
+        System.out.println("picked up new socket connection");
+        /*
         try {
             client = server.accept();
-        } catch (IOException e) {
-            System.out.println("Accept failed: "+portNumber);
+        }catch(IOException e){
+            System.out.println("Could not accept her");
             System.exit(-1);
-        }
-
+        }   
+        */
+        serverConnection sc = new serverConnection(server, textArea);
+        sc.start();
+        /*
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintWriter(client.getOutputStream(), true);
@@ -155,9 +160,11 @@ public class server extends JFrame implements ActionListener{
                 System.exit(-1);
             }
         }
+        */
         }
         });  
         listenerThread.start();
+        
     }
     
     protected void finalize() {

@@ -15,10 +15,10 @@ public class Lab_2_multithreaded_client_server  {
         String ipAddress = "192.168.1.53";
         int port = 4444;
         // TODO code application logic here
-        server serverOnj = new server(port);
+        server serverObj = new server(port);
         client clientObj = new client(ipAddress, port);
-        client clientObj2 = new client(ipAddress, port);
-        client clientObj3 = new client(ipAddress, port);
+        // client clientObj2 = new client(ipAddress, port);
+        // client clientObj3 = new client(ipAddress, port);
     }
     
 }
