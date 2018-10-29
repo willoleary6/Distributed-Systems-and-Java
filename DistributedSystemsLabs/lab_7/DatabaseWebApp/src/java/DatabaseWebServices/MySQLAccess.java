@@ -1,4 +1,4 @@
-package lab_3_jdbc;
+package DatabaseWebServices;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,32 +20,33 @@ public class MySQLAccess {
           Class.forName("com.mysql.jdbc.Driver");
           // Setup the connection with the DB
           String url       = "jdbc:mysql://localhost/muprhys's_lab";
-            String user      = "root";
-            String password  = "";
-
-            // create a connection to the database
-            connect = DriverManager.getConnection(url, user, password);
-
+          String user      = "root";
+          String password  = "";
+          // create a connection to the database
+          connect = DriverManager.getConnection(url, user, password);
       } catch(Exception e) {
           System.out.println("Unable to connect to database");
           System.out.println(e);
-      }
+      } 
   }
   
-  public void selectFromDatabase(String query){
+  public String selectFromDatabase(String query){
+      String result = "";
       try {
         // Statements allow to issue SQL queries to the database
         statement = connect.createStatement();
         // Result set get the result of the SQL query
         preparedStatement = connect
-          .prepareStatement(query);
+         .prepareStatement(query);
         resultSet = preparedStatement.executeQuery();
       
-        writeResultSet(resultSet);
+        result = writeResultSet(resultSet);
       } catch(Exception e) {
+          result = e.toString();
           System.out.println("Unable to select from database");
           System.out.println(e);
       }
+      return result;
   }
   
   public void insertIntoDatabase(String query, Object [] args){
@@ -121,28 +122,12 @@ private void writeMetaData(ResultSet resultSet) throws SQLException {
     }
   }
 
-  private void writeResultSet(ResultSet resultSet) throws SQLException {
-    // ResultSet is initially before the first data set
+  private String writeResultSet(ResultSet resultSet) throws SQLException {
+    String value = "";
     while (resultSet.next()) {
-      // It is possible to get the columns via name
-      // also possible to get the columns via the column number
-      // which starts at 1
-      // e.g. resultSet.getSTring(2);
-      String user = resultSet.getString("username");
-      System.out.println("User: " + user);
-      /*
-      String user = resultSet.getString("myuser");
-      String website = resultSet.getString("webpage");
-      String summery = resultSet.getString("summery");
-      Date date = resultSet.getDate("datum");
-      String comment = resultSet.getString("comments");
-      System.out.println("User: " + user);
-      System.out.println("Website: " + website);
-      System.out.println("Summery: " + summery);
-      System.out.println("Date: " + date);
-      System.out.println("Comment: " + comment);
-        */
+      value += resultSet.getString("username")+"\n";
     }
+    return  value;
   }
 
   // You need to close the resultSet

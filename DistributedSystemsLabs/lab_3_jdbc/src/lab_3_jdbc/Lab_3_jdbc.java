@@ -18,7 +18,8 @@ public class Lab_3_jdbc {
         MySQLAccess sql = new MySQLAccess();
         try{
             sql.connectToDatabase();
-            sql.selectFromDatabase("select * from FEEDBACK.COMMENTS");
+            sql.selectFromDatabase("select * from users");
+            /*
             Object [] values = {"Test", "TestEmail", "TestWebpage","2009/12/11","TestSummary", "TestComment"};
             sql.insertIntoDatabase("insert into  FEEDBACK.COMMENTS values (default, ?, ?, ?, ? , ?, ?)", values);
             sql.selectFromDatabase("SELECT myuser, webpage, datum, summery, COMMENTS from FEEDBACK.COMMENTS");
@@ -26,6 +27,7 @@ public class Lab_3_jdbc {
             Object [] deleteValues = {"test"};
             sql.deleteFromDatabase("delete from FEEDBACK.COMMENTS where myuser= ? ; ", deleteValues);
             sql.selectFromDatabase("select * from FEEDBACK.COMMENTS");
+            */
         }catch(Exception e) {
             System.out.println(e);
         }finally {
