@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xs:schema xmlns:tns="http://hangman/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://hangman/">
+
+<xs:element name="addGuess" type="tns:addGuess"/>
+
+<xs:element name="addGuessResponse" type="tns:addGuessResponse"/>
+
+<xs:element name="checkLogin" type="tns:checkLogin"/>
+
+<xs:element name="checkLoginResponse" type="tns:checkLoginResponse"/>
+
+<xs:element name="getRandomWord" type="tns:getRandomWord"/>
+
+<xs:element name="getRandomWordResponse" type="tns:getRandomWordResponse"/>
+
+<xs:element name="getWord" type="tns:getWord"/>
+
+<xs:element name="getWordResponse" type="tns:getWordResponse"/>
+
+<xs:element name="guessesUsed" type="tns:guessesUsed"/>
+
+<xs:element name="guessesUsedResponse" type="tns:guessesUsedResponse"/>
+
+<xs:element name="newGame" type="tns:newGame"/>
+
+<xs:element name="newGameResponse" type="tns:newGameResponse"/>
+
+<xs:element name="registerUser" type="tns:registerUser"/>
+
+<xs:element name="registerUserResponse" type="tns:registerUserResponse"/>
+
+<xs:complexType name="registerUser">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="surname" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="registerUserResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkLogin">
+<xs:sequence>
+<xs:element name="uname" type="xs:string" minOccurs="0"/>
+<xs:element name="pword" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkLoginResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="guessesUsed">
+<xs:sequence>
+<xs:element name="gID" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="guessesUsedResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addGuess">
+<xs:sequence>
+<xs:element name="letter" type="xs:string" minOccurs="0"/>
+<xs:element name="player" type="xs:int"/>
+<xs:element name="game" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addGuessResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="newGame">
+<xs:sequence>
+<xs:element name="p1" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="newGameResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getWord">
+<xs:sequence>
+<xs:element name="gid" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getWordResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getRandomWord">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getRandomWordResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
