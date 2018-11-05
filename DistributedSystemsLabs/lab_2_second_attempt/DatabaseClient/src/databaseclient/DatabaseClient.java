@@ -23,6 +23,7 @@ public class DatabaseClient {
         proxy = link.getDatabaseWebServicesPort();
         
         System.out.println(proxy.selectQuery("*","users"));
+        System.out.println(proxy.insertQuery("users","username,password","ab,password"));
     }
     
 }

@@ -53,7 +53,10 @@ public class MySQLAccess {
       try {
         preparedStatement = connect
           .prepareStatement(query);
-        // "myuser, webpage, datum, summery, COMMENTS from FEEDBACK.COMMENTS")
+        /*
+        INSERT INTO `flights` (`extendedDataInJSON`) 
+	VALUES (NULL);
+        */
         setPreparedStatement(args);
         preparedStatement.executeUpdate();
         } catch(Exception e) {
@@ -67,6 +70,11 @@ public class MySQLAccess {
         preparedStatement = connect
           .prepareStatement(query);
         setPreparedStatement(args);
+        /*
+        UPDATE `flights` 
+		SET `flightNumber` = 'AP3213'
+                WHERE `flights`.`autoID` = 29;
+        */
         preparedStatement.executeUpdate();
         } catch(Exception e) {
           System.out.println("Unable to insert into database");
@@ -102,6 +110,9 @@ public class MySQLAccess {
         preparedStatement = connect
         .prepareStatement(query);
         setPreparedStatement(args);
+        /*
+        DELETE FROM `users` WHERE `users`.`autoID` = 1"
+        */
         preparedStatement.executeUpdate();
       
       } catch(Exception e) {
