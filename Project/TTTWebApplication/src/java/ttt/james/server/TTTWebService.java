@@ -19,7 +19,7 @@ public class TTTWebService {
     private MySQLAccess dao; 
     
     public TTTWebService() {
-        dao = new MySQLAccess("localhost", "root", "", "tttexample");
+        dao = new MySQLAccess("localhost", "root", "", "feedback");
     }
 
     /**
@@ -443,5 +443,14 @@ public class TTTWebService {
         } catch(Exception e) {
             return "ERROR-DB";
         }
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "test")
+    public String test() {
+        //TODO write your implementation code here:
+        return "working";
     }
 }
