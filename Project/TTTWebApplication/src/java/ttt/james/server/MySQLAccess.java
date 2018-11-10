@@ -20,7 +20,7 @@ public class MySQLAccess {
     private ResultSet resultSet = null;
 
     public MySQLAccess() {
-        String url = "jdbc:mysql://localhost/feedback?user=sqluser&password=sqluserpw";
+        String url = "jdbc:mysql://localhost/tttexample?user=root&password=";
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager.getConnection(url);      
