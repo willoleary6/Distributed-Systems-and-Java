@@ -53,7 +53,7 @@ class SoapInterface
             array(
                 'uid'=>$this->sanitiseInput($uid)));
         //returns autokey
-        print_r($result->return.'<br>');
+        return $result->return;
     }
 
     public function joinGame($userID, $gameID){
@@ -104,7 +104,7 @@ class SoapInterface
                 'pid'=>$this->sanitiseInput($playerID)
             ));
         //returns autokey
-        print_r($result->return.'<br>');
+        return $result->return;
     }
 
     public function getBoard($gameID){
@@ -112,7 +112,7 @@ class SoapInterface
             array(
                 'gid'=>$this->sanitiseInput($gameID)));
         //returns autokey
-        print_r($result->return.'<br>');
+        return $result->return;
     }
 
     public function getLeagueTable(){
