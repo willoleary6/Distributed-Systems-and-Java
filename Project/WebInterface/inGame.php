@@ -41,7 +41,24 @@ if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
 
 }
 ?>
-<script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function testChecker(){
+            $.ajax({
+                type:"post",
+                url:"updateChecker.php",
+                data:{
+                    gameID: <?php echo json_encode(getGameID()) ?>,
+                    currentBoard: <?php echo json_encode(getBoard())?>,
+                },
+                cache:false,
+                success: (response) => {
+                    if(response == 1){
+                        location.reload();
+                    }
+                }
+            });
+        }
     function buildBoard(previousMoves) {
 
         previousMoves = previousMoves.split("\n");
@@ -107,5 +124,17 @@ if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
 <?php
 
 echo '<script>buildBoard(' . json_encode(getBoard()) . ');</script>';
+?>
 
-
+<script>  
+    let worker;
+    if(window.Worker){
+        worker = new Worker('workers.js');
+        worker.postMessage({
+            data: 'start board checker',
+        });
+        worker.addEventListener('message', (event) => {
+            testChecker();
+        })
+    }
+</script>';

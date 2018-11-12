@@ -1,38 +1,13 @@
 <?php
-/*
-class AsyncOperation extends Thread {
-
-    public function __construct($arg) {
-        $this->arg = $arg;
-    }
-
-    public function run() {
-        if ($this->arg) {
-            $sleep = mt_rand(1, 10);
-            printf('%s: %s  -start -sleeps %d' . "\n", date("g:i:sa"), $this->arg, $sleep);
-            sleep($sleep);
-            printf('%s: %s  -finish' . "\n", date("g:i:sa"), $this->arg);
-        }
-    }
-
-
-    public function isGarbage(): bool
-    {
-        // TODO: Implement isGarbage() method.
+require_once('./SoapInterface.php');
+$interface = new SoapInterface();
+if (isset($_POST['gameID']) && isset($_POST['currentBoard'])) {
+    $gameID = $_POST['gameID'];
+    $currentBoard = $_POST['currentBoard'];
+    $newBoard = $interface->getBoard($gameID);
+    if($currentBoard == $newBoard){
+        echo 0;
+    }else{
+        echo 1;
     }
 }
-
-// Create a array
-$stack = array();
-
-//Iniciate Miltiple Thread
-foreach ( range("A", "D") as $i ) {
-    $stack[] = new AsyncOperation($i);
-}
-
-// Start The Threads
-foreach ( $stack as $t ) {
-    $t->start();
-}
-
-?>
