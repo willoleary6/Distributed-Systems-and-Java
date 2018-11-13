@@ -1,60 +1,33 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 require_once('memoryChecks.php');
 require_once('./SoapInterface.php');
+require_once('./inGameUtilities.php');
 $memoryTest = new memoryChecks();
 $memoryTest->checkCredentials();
 $memoryTest->checkGameID();
 
-function getUserID(){
-    $config = include('config.php');
-    return $_SESSION[$config['cookieUserId']];
-}
+$utilities = new inGameUtilities();
 
-function getUsername()
-{
-    $config = include('config.php');
-    return $_SESSION[$config['cookieUsername']];
-}
-
-function getGameID()
-{
-    $config = include('config.php');
-    return $_SESSION[$config['gameID']];
-}
-
-function getBoard(){
-    $interface = new SoapInterface();
-    $board = $interface->getBoard(getGameID());
-    return $board;
-}
-
-if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
-    echo "working";
-    $guid = getGameID();
-    $x = $_GET['x'];
-    $y = $_GET['y'];
-    $pID = getUserID();
-    $interface = new SoapInterface();
-    $interface->takeSquare($guid,$x,$y,$pID);
-    header( "Location: inGame.php" );
-
-}
 ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        function testChecker(){
+        let currentTicBoard = undefined;
+        getBoard();
+        function checker(){
             $.ajax({
                 type:"post",
                 url:"updateChecker.php",
                 data:{
-                    gameID: <?php echo json_encode(getGameID()) ?>,
-                    currentBoard: <?php echo json_encode(getBoard())?>,
+                    gameID: <?php echo json_encode($utilities->getGameID()) ?>,
+                    currentBoard: currentTicBoard,
                 },
                 cache:false,
                 success: (response) => {
                     if(response == 1){
-                        location.reload();
+                        getBoard();
                     }
                 }
             });
@@ -73,11 +46,8 @@ if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
             });
         }
 
-
-
-
-
         let element = document.getElementById('board');
+        element.innerHTML ='';
         let table = document.createElement("table");
         for(let i = 0; i < 3; i++){
             let tableRow = document.createElement("tr");
@@ -98,13 +68,46 @@ if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
             table.appendChild(tableRow);
         }
         element.appendChild(table);
+        currentTicBoard = previousMoves;
     }
 
-    function tileClicked (coordinates){
-        let coordinatesArray = coordinates.split(",");
-        //TODO replace with ajax
-        window.location.href = "inGame.php?takeSquare=true&x="+coordinatesArray[0]+"&y="+coordinatesArray[1];
-    }
+        function tileClicked (coordinates){
+            let coordinatesArray = coordinates.split(",");
+            $.ajax({
+                type:"post",
+                url:"inGameUtilities.php",
+                data:{
+                    takeSquare: true,
+                    x: coordinatesArray[0],
+                    y: coordinatesArray[1],
+                },
+                cache:false,
+            });
+        }
+
+        function getBoard(){
+            $.ajax({
+                type:"post",
+                url:"inGameUtilities.php",
+                data:{
+                    getBoard: true,
+                },
+                cache:false,
+            }).done(function(data, textStatus, jqXHR){
+                buildBoard(jqXHR.responseText);
+            });
+        }
+
+        let worker;
+        if(window.Worker){
+            worker = new Worker('workers.js');
+            worker.postMessage({
+                data: 'start board checker',
+            });
+            worker.addEventListener('message', (event) => {
+                checker();
+            })
+        }
 </script>
 <style>
     table, th, td {
@@ -121,20 +124,6 @@ if (isset($_GET['takeSquare']) AND isset($_GET['x']) AND isset($_GET['y'])) {
     </body>
 </html>
 
-<?php
-
-echo '<script>buildBoard(' . json_encode(getBoard()) . ');</script>';
-?>
-
 <script>  
-    let worker;
-    if(window.Worker){
-        worker = new Worker('workers.js');
-        worker.postMessage({
-            data: 'start board checker',
-        });
-        worker.addEventListener('message', (event) => {
-            testChecker();
-        })
-    }
-</script>';
+
+</script>

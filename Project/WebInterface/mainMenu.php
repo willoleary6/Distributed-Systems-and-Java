@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 require_once('memoryChecks.php');
 require_once('./SoapInterface.php');
 $memoryTest = new memoryChecks();
@@ -20,26 +22,6 @@ $interface = new SoapInterface();
 $userID = getUserID();
 $username = getUserName();
 
-if (isset($_GET['newGame'])) {
-    $config = include('config.php');
-    $gameID = $interface->newGame($userID);
-    $_SESSION[$config['gameID']] = $gameID;
-    header( "Location: inGame.php" );
-}
-
-if (isset($_GET['enterGame']) AND isset($_GET['gameID'])) {
-    $config = include('config.php');
-    $_SESSION[$config['gameID']] = $_GET['gameID'];
-    //TODO replace with ajax
-    header( "Location: inGame.php" );
-}
-
-if (isset($_GET['joinGame']) AND isset($_GET['gameID'])) {
-    $config = include('config.php');
-    $_SESSION[$config['gameID']] = $_GET['gameID'];
-    $interface->joinGame( getUserID(), $_GET['gameID']);
-    header( "Location: inGame.php" );
-}
 
 function getUserID(){
     $config = include('config.php');
@@ -52,6 +34,7 @@ function getUsername(){
 }
 ?>
 <!DOCTYPE HTML>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         function printAllOpenGames(list, userId){
             let element = document.getElementById('allOpenGames');
@@ -81,18 +64,48 @@ function getUsername(){
         }
 
         function joinGame(gameID){
-            //TODO replace with ajax
-            window.location.href = "mainMenu.php?joinGame=true&gameID="+gameID;
+            $.ajax({
+                type:"post",
+                url:"mainMenuUtilities.php",
+                data:{
+                    joinGame: true ,
+                    gameID: gameID,
+                },
+                cache:false,
+                success: () => {
+                    window.location.href = "inGame.php";
+                }
+
+            });
         }
 
         function newGame() {
-            //TODO replace with ajax
-            window.location.href = "mainMenu.php?newGame=true";
+            $.ajax({
+                type:"post",
+                url:"mainMenuUtilities.php",
+                data:{
+                    newGame: true,
+                },
+                cache:false,
+                success: () => {
+                    window.location.href = "inGame.php";
+                }
+            });
         }
 
         function enterGame(gameID) {
-            //TODO replace with ajax
-            window.location.href = "mainMenu.php?enterGame=true&gameID="+gameID;
+            $.ajax({
+                type:"post",
+                url:"mainMenuUtilities.php",
+                data:{
+                    enterGame: true,
+                    gameID: gameID,
+                },
+                cache:false,
+                success: () => {
+                    window.location.href = "inGame.php";
+                }
+            });
         }
 
         function printAllMyGames(list){
