@@ -4,34 +4,16 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 require_once('memoryChecks.php');
 require_once('./SoapInterface.php');
+require_once('./Utilities.php');
 $memoryTest = new memoryChecks();
 $memoryTest->checkCredentials();
-if (isset($_GET['logout'])) {
-    logout();
-}
-
-function logout(){
-    $config = include('config.php');
-    setcookie($config['cookieUserId'], null, -1, '/');
-    setcookie($config['cookieUsername'], null, -1, '/');
-    session_destroy ();
-    header( "Location: index.php" );
-}
-
+$utilities = new Utilities();
 $interface = new SoapInterface();
-$userID = getUserID();
-$username = getUserName();
-
-
-function getUserID(){
-    $config = include('config.php');
-    return $_SESSION[$config['cookieUserId']];
-}
-
-function getUsername(){
-    $config = include('config.php');
-    return $_SESSION[$config['cookieUsername']];
-}
+$userID = $utilities->getUserID();
+$username = $utilities->getUserName();
+$openGames = $interface->showOpenGames();
+$allMyGames = $interface->showAllMyGames($userID);
+$allMyOpenGames = $interface->showMyOpenGames($userID);
 ?>
 <!DOCTYPE HTML>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -66,7 +48,7 @@ function getUsername(){
         function joinGame(gameID){
             $.ajax({
                 type:"post",
-                url:"mainMenuUtilities.php",
+                url:"Utilities.php",
                 data:{
                     joinGame: true ,
                     gameID: gameID,
@@ -82,7 +64,7 @@ function getUsername(){
         function newGame() {
             $.ajax({
                 type:"post",
-                url:"mainMenuUtilities.php",
+                url:"Utilities.php",
                 data:{
                     newGame: true,
                 },
@@ -96,7 +78,7 @@ function getUsername(){
         function enterGame(gameID) {
             $.ajax({
                 type:"post",
-                url:"mainMenuUtilities.php",
+                url:"Utilities.php",
                 data:{
                     enterGame: true,
                     gameID: gameID,
@@ -132,6 +114,20 @@ function getUsername(){
                 element.appendChild(textnode);
             }
 
+        }
+
+        function logout(){
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    logout: true,
+                },
+                cache:false,
+                success: () => {
+                    window.location.href = "index.php";
+                }
+            });
         }
 
         function printAllMyOpenGames(list){
@@ -193,23 +189,16 @@ function getUsername(){
             </div>
             <br>
             <div>
-                <a href='mainMenu.php?logout=true'>logout</a>
-                <br>
+                <button onclick="logout()">Logout</button>
             </div>
 
         </body>
     </html>
 
 <?php
-
-$openGames = $interface->showOpenGames();
-echo '<script>printAllOpenGames(' . json_encode($openGames) . ',' . json_encode($username) . ');</script>';
-
-$allMyGames = $interface->showAllMyGames($userID);
-echo '<script>printAllMyGames(' . json_encode($allMyGames) . ');</script>';
-
-$allMyOpenGames = $interface->showMyOpenGames($userID);
-echo '<script>printAllMyOpenGames(' . json_encode($allMyOpenGames) . ');</script>';
+    echo '<script>printAllOpenGames(' . json_encode($openGames) . ',' . json_encode($username) . ');</script>';
+    echo '<script>printAllMyGames(' . json_encode($allMyGames) . ');</script>';
+    echo '<script>printAllMyOpenGames(' . json_encode($allMyOpenGames) . ');</script>';
 
 
 

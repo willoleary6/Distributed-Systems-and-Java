@@ -4,12 +4,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 require_once('memoryChecks.php');
 require_once('./SoapInterface.php');
-require_once('./inGameUtilities.php');
+require_once('./Utilities.php');
 $memoryTest = new memoryChecks();
 $memoryTest->checkCredentials();
 $memoryTest->checkGameID();
 
-$utilities = new inGameUtilities();
+$utilities = new Utilities();
 
 ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -26,8 +26,26 @@ $utilities = new inGameUtilities();
                 },
                 cache:false,
                 success: (response) => {
-                    if(response == 1){
+                    getGameState();
+                    if(response === 1){
                         getBoard();
+                    }
+                }
+            });
+        }
+        //getGameState
+        function getGameState(){
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    gameID: <?php echo json_encode($utilities->getGameID()) ?>,
+                    getGameState: true,
+                },
+                cache:false,
+                success: (response) => {
+                    if(response != 0){
+                        disableBoard();
                     }
                 }
             });
@@ -75,7 +93,7 @@ $utilities = new inGameUtilities();
             let coordinatesArray = coordinates.split(",");
             $.ajax({
                 type:"post",
-                url:"inGameUtilities.php",
+                url:"Utilities.php",
                 data:{
                     takeSquare: true,
                     x: coordinatesArray[0],
@@ -85,10 +103,27 @@ $utilities = new inGameUtilities();
             });
         }
 
+        function disableBoard(){
+            var e = $('#board');
+            //console.log(e.data('disabled'));
+            if(!e.data('disabled')){
+                function cancel () { return false; };
+                var nodes = document.getElementById("board").getElementsByTagName('*');
+                for (var i = 0; i < nodes.length; i++) {
+                    nodes[i].setAttribute('disabled', true);
+                    nodes[i].onclick = cancel;
+                }
+            }
+        }
+        function enableBoard(){
+            //let element = document.getElementById('board');
+           // element.disable = false;
+        }
+
         function getBoard(){
             $.ajax({
                 type:"post",
-                url:"inGameUtilities.php",
+                url:"Utilities.php",
                 data:{
                     getBoard: true,
                 },
@@ -106,6 +141,7 @@ $utilities = new inGameUtilities();
             });
             worker.addEventListener('message', (event) => {
                 checker();
+                //getGameState();
             })
         }
 </script>
@@ -117,7 +153,7 @@ $utilities = new inGameUtilities();
 <html>
     <body>
     <h1>In Game</h1>
-    <div id="board">
+    <div id="board" data-disabled="false">
 
     </div>
 
