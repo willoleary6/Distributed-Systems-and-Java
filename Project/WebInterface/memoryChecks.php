@@ -17,17 +17,4 @@ class memoryChecks{
             header( "Location: mainMenu.php" );
         }
     }
-    /*
-    if(!isset($_COOKIE[$config['cookieUserId']]) OR !isset($_COOKIE[$config['cookieUsername']])) {
-        #echo '<script>alert("firing");</script>';
-        #header( "Location: index.php" );
-    }
-
-    else {
-        $userValidation = new UserValidation();
-        $userID = $_COOKIE[$config['cookieUserId']];
-        $username= $_COOKIE[$config['cookieUsername']];
-        $userValidation->setItemsInSessionAndCookies($userID, $username);
-    }
-    */
 }

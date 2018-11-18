@@ -3,7 +3,7 @@ self.addEventListener('message', (event) => {
         let returnMessage = event.data;
         setInterval(function () {
             postMessages(returnMessage)
-        }, 500);
+        }, 750);
     }
 })
 

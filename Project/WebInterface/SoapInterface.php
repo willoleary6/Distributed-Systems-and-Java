@@ -81,7 +81,7 @@ class SoapInterface
                 'gstate'=>$this->sanitiseInput($gameState)
             ));
         //returns autokey
-        return$result->return;
+        return $result->return;
     }
 
     public function checkSquare($gameID, $xValue, $yValue){
@@ -117,15 +117,14 @@ class SoapInterface
 
     public function getLeagueTable(){
         $result = $this->proxyInstance->leagueTable();
-        return$result->return;
+        return $result->return;
     }
 
     public function checkWin($gameID){
         $result = $this->proxyInstance->checkWin(
             array(
                 'gid'=>$this->sanitiseInput($gameID)));
-        //returns autokey
-        return$result->return;
+        return $result->return;
     }
 
     public function deleteGame($userID, $gameID){
@@ -135,7 +134,7 @@ class SoapInterface
                 'gid'=>$this->sanitiseInput($gameID)
             ));
         //returns autokey
-        return$result->return;
+        return $result->return;
     }
 
     public function showMyOpenGames($uid){
@@ -158,7 +157,7 @@ class SoapInterface
         $result = $this->proxyInstance->showOpenGames(
             array());
         //returns autokey
-        return$result->return;
+        return $result->return;
     }
 
     private function sanitiseInput($input){

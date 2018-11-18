@@ -13,10 +13,13 @@ class Utilities
 {
     private $config;
     private $interface;
+    private $currentGameState;
+
     public function __construct()
     {
         $this->config = include('config.php');
         $this->interface = new SoapInterface();
+        $this->currentGameState = null;
     }
 
     function logout(){
@@ -37,8 +40,8 @@ class Utilities
 
     function joinGame(){
         $_SESSION[$this->config['gameID']] = $_POST['gameID'];
-        $this->interface->joinGame( getUserID(), $_POST['gameID']);
-
+        $this->interface->joinGame( $this->getUserID(), $_POST['gameID']);
+        $this->interface->setGameState($_POST['gameID'], 0);
     }
 
     function getUserID(){
@@ -58,6 +61,11 @@ class Utilities
         return $board;
     }
 
+    function checkWin(){
+        $winner = $this->interface->checkWin($this->getGameID());
+        return $winner;
+    }
+
     function takeSquare(){
         $guid = $this->getGameID();
         $x = $_POST['x'];
@@ -66,11 +74,18 @@ class Utilities
         return $this->interface->takeSquare($guid,$x,$y,$pID);
     }
 
-    function getGameState($gameID){
+    function getGameState($gameID, $currentGameState){
         $gameState = $this->interface->getGameState($gameID);
+        if($currentGameState == $gameState ){
+            return "No-Change";
+        }
         return $gameState;
     }
-
+    //setGameState
+    function setGameState( $newGameState){
+        $gameState = $this->interface->setGameState($this->getGameID(), $newGameState);
+        return $gameState;
+    }
 }
 
 $utilities = new Utilities();
@@ -87,8 +102,16 @@ if (isset($_POST['newGame'])) {
     $utilities->generateNewGame();
 }
 
-if (isset($_POST['getGameState']) AND isset($_POST['gameID'])) {
-    echo $utilities->getGameState($_POST['gameID']);
+if (isset($_POST['checkWin'])) {
+    echo $utilities->checkWin();
+}
+
+if (isset($_POST['getGameState']) AND isset($_POST['gameID']) AND isset($_POST['currentGameState'])) {
+    echo $utilities->getGameState($_POST['gameID'], $_POST['currentGameState']);
+}
+
+if (isset($_POST['setGameState'])  AND isset($_POST['newGameState'])) {
+    echo $utilities->setGameState($_POST['newGameState']);
 }
 
 if (isset($_POST['enterGame']) AND isset($_POST['gameID'])) {
