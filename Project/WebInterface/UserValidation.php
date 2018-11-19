@@ -57,3 +57,26 @@ class UserValidation
         header( "Location: ". $newLocation);
     }
 }
+
+$config = include('config.php');
+
+$userValidation = new UserValidation();
+if(isset($_COOKIE[$config['cookieUserId']]) AND isset($_COOKIE[$config['cookieUsername']])) {
+    $userID = $_COOKIE[$config['cookieUserId']];
+    $username= $_COOKIE[$config['cookieUsername']];
+    $userValidation->setItemsInSessionAndCookies($userID, $username);
+}
+
+if (isset($_GET['login'])) {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $userValidation->login($username, $password);
+}
+
+if (isset($_GET['register'])) {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $forename = $_POST["forename"];
+    $surname = $_POST["surname"];
+    $userValidation->register($username, $password, $forename, $surname);
+}

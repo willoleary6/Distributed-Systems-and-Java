@@ -19,7 +19,6 @@ $utilities = new Utilities();
         let myTurn = false;
         getBoard();
 
-
         function checker(){
             $.ajax({
                 type:"post",
@@ -53,6 +52,9 @@ $utilities = new Utilities();
                             currentGameState = response;
                             disableBoard();
                         } else {
+
+                            let element = document.getElementById("gameStatus");
+                            element.innerHTML = 'Game in Progress';
                             currentGameState = response;
                             enableBoard();
                         }
@@ -79,7 +81,7 @@ $utilities = new Utilities();
                         let myID = <?php echo json_encode($utilities->getUserID()) ?>;
                         let previousMoves = response.split("\n");
                         let lastMove = previousMoves[previousMoves.length - 1].split(",");
-                        if (lastMove[0] === myID) {
+                        if (lastMove[0] == myID) {
                             myTurn = false;
                             disableBoard();
                         } else {
@@ -245,7 +247,7 @@ $utilities = new Utilities();
 </style>
 <html>
     <body>
-    <h1 id="gameStatus">Game in progress</h1>
+    <h1 id="gameStatus">Waiting on player 2 to join</h1>
     <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
     <div id="board" disabled=false>
 
