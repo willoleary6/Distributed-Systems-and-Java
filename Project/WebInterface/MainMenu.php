@@ -7,29 +7,30 @@ require_once('./WebServiceHandler.php');
 require_once('./Utilities.php');
 $memoryTest = new memoryChecks();
 $memoryTest->checkCredentials();
-$utilities = new Utilities();
-$interface = new WebServiceHandler();
-$userID = $utilities->getUserID();
-$username = $utilities->getUserName();
-$openGames = $interface->showOpenGames();
-$allMyGames = $interface->showAllMyGames($userID);
-$allMyOpenGames = $interface->showMyOpenGames($userID);
 ?>
 <!DOCTYPE HTML>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        function printAllOpenGames(list, userId){
+        const mainMenuNameSpace = {
+            currentListOfOpenGames: "",
+            getAllMyOpenGames: () => getAllMyOpenGames(),
+            getAllOpenGames : () => getAllOpenGames(),
+            getAllMyGames: () => getAllMyGames(),
+            worker: undefined,
+        }
+        const printAllOpenGames = (list) => {
             let element = document.getElementById('allOpenGames');
+            element.innerHTML = '';
             if(!list.startsWith('ERROR')) {
                 let arrayOfText = list.split("\n");
                 arrayOfText.forEach((text) => {
                     let node = document.createElement("ul");
                     let listItem = document.createElement("li");
-                    let textArray = text.split(",");
-                    if (textArray[1] != userId) {
+                    if(text != "") {
+                        let textArray = text.split(",");
                         textArray.forEach((text) => {
-                            let textnode = document.createTextNode(text + " - ");
-                            listItem.appendChild(textnode);
+                            let textNode = document.createTextNode(text + " - ");
+                            listItem.appendChild(textNode);
                         })
                         let button = document.createElement("button");
                         button.innerHTML = "Join Game";
@@ -40,12 +41,12 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
                     }
                 });
             }else{
-                let textnode = document.createTextNode( " No Games ");
-                element.appendChild(textnode);
+                let textNode = document.createTextNode( " No Games ");
+                element.appendChild(textNode);
             }
         }
 
-        function joinGame(gameID){
+        const joinGame = (gameID) => {
             $.ajax({
                 type:"post",
                 url:"Utilities.php",
@@ -61,7 +62,7 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
             });
         }
 
-        function newGame() {
+        const newGame = () => {
             $.ajax({
                 type:"post",
                 url:"Utilities.php",
@@ -75,7 +76,7 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
             });
         }
 
-        function enterGame(gameID) {
+        const enterGame = (gameID) => {
             $.ajax({
                 type:"post",
                 url:"Utilities.php",
@@ -90,7 +91,7 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
             });
         }
 
-        function printAllMyGames(list){
+        const printAllMyGames = (list) => {
             let element = document.getElementById('allMyGames');
             if(!list.startsWith('ERROR')) {
                 let arrayOfText = list.split("\n");
@@ -99,8 +100,8 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
                     let listItem = document.createElement("li");
                     let textArray = text.split(",");
                     textArray.forEach((text) => {
-                        let textnode = document.createTextNode(text + " - ");
-                        listItem.appendChild(textnode);
+                        let textNode = document.createTextNode(text + " - ");
+                        listItem.appendChild(textNode);
                     })
                     let button = document.createElement("button");
                     button.innerHTML = "Re-enter Game";
@@ -110,13 +111,13 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
                     element.appendChild(node);
                 });
             }else{
-                let textnode = document.createTextNode( " No Games ");
-                element.appendChild(textnode);
+                let textNode = document.createTextNode( " No Games ");
+                element.appendChild(textNode);
             }
 
         }
 
-        function logout(){
+        const logout = () => {
             $.ajax({
                 type:"post",
                 url:"Utilities.php",
@@ -130,7 +131,7 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
             });
         }
 
-        function printAllMyOpenGames(list){
+        const printAllMyOpenGames = (list) => {
             let element = document.getElementById('allMyOpenGames');
             if(!list.startsWith('ERROR')) {
                 let arrayOfText = list.split("\n");
@@ -139,8 +140,8 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
                     let listItem = document.createElement("li");
                     let textArray = text.split(",");
                     textArray.forEach((text) => {
-                        let textnode = document.createTextNode(text + " - ");
-                        listItem.appendChild(textnode);
+                        let textNode = document.createTextNode(text + " - ");
+                        listItem.appendChild(textNode);
                     });
                     let button = document.createElement("button");
                     button.innerHTML = "Re-enter Game";
@@ -150,10 +151,85 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
                     element.appendChild(node);
                 });
             }else{
-                let textnode = document.createTextNode( " No Games ");
-                element.appendChild(textnode);
+                let textNode = document.createTextNode( " No Games ");
+                element.appendChild(textNode);
             }
         }
+
+        const getAllMyOpenGames = () => {
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    getAllMyOpenGames: true,
+                },
+                cache:false,
+                success: (results) => {
+                    printAllMyOpenGames(results);
+                }
+            });
+        }
+
+        const getAllOpenGames = () => {
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    getAllOpenGames: true,
+                },
+                cache:false,
+                success: (results) => {
+                    mainMenuNameSpace.currentListOfOpenGames = results;
+                    printAllOpenGames(results);
+                }
+            });
+        }
+
+        const getAllMyGames = () => {
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    getAllMyGames: true,
+                },
+                cache:false,
+                success: (results) => {
+                    printAllMyGames(results);
+                }
+            });
+        }
+
+        const checkAllOpenGames = () => {
+            $.ajax({
+                type:"post",
+                url:"Utilities.php",
+                data:{
+                    getAllOpenGames: true,
+                },
+                cache:false,
+                success: (results) => {
+                    if(results != mainMenuNameSpace.currentListOfOpenGames){
+                        getAllOpenGames();
+                    }
+                }
+            });
+        }
+
+        mainMenuNameSpace.getAllMyOpenGames();
+        mainMenuNameSpace.getAllOpenGames();
+        mainMenuNameSpace.getAllMyGames();
+
+        if(window.Worker){
+            mainMenuNameSpace.worker = new Worker('UpdateWorker.js');
+            mainMenuNameSpace.worker.postMessage({
+                data: '',
+            });
+            mainMenuNameSpace.worker.addEventListener('message', () => {
+                checkAllOpenGames();
+            })
+        }
+
+
 
     </script>
     <style>
@@ -185,7 +261,7 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
             </div>
             <br>
             <div>
-                <button>Leaderboard</button>
+                <button onclick="location.href = 'LeaderBoard.php';">Leaderboard</button>
             </div>
             <br>
             <div>
@@ -195,10 +271,6 @@ $allMyOpenGames = $interface->showMyOpenGames($userID);
         </body>
     </html>
 
-<?php
-    echo '<script>printAllOpenGames(' . json_encode($openGames) . ',' . json_encode($username) . ');</script>';
-    echo '<script>printAllMyGames(' . json_encode($allMyGames) . ');</script>';
-    echo '<script>printAllMyOpenGames(' . json_encode($allMyOpenGames) . ');</script>';
 
 
 
