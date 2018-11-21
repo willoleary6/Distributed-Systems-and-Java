@@ -31,7 +31,11 @@ public class MainGame extends javax.swing.JFrame {
         proxy.setGameState(this.gameID, state);
     }
     
-    public void changeState() {
+    public void updateBoard(String[] board) {
+        
+    }
+    
+    public void updatePlayer() {
         
     }
 
@@ -61,7 +65,7 @@ public class MainGame extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelPlayer = new javax.swing.JLabel();
 
         jLabelX.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabelX.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -194,8 +198,8 @@ public class MainGame extends javax.swing.JFrame {
         jLabel1.setText("Turn: ");
         jPanel2.add(jLabel1);
 
-        jLabel2.setText("Player");
-        jPanel2.add(jLabel2);
+        jLabelPlayer.setText("Player");
+        jPanel2.add(jLabelPlayer);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,12 +296,12 @@ public class MainGame extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelO;
     private javax.swing.JLabel jLabelO1;
     private javax.swing.JLabel jLabelO2;
     private javax.swing.JLabel jLabelO3;
     private javax.swing.JLabel jLabelO4;
+    private javax.swing.JLabel jLabelPlayer;
     private javax.swing.JLabel jLabelX;
     private javax.swing.JLabel jLabelX1;
     private javax.swing.JLabel jLabelX2;
