@@ -183,7 +183,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             try {
                 gameID = Integer.parseInt(result);
                 System.out.println("success " + gameID);
-                games.add(new MainGame(proxy, gameID));
+                games.add(new MainGame(proxy, gameID, userID));
                 successLabel.setText("Successfully created game");
             } catch( Exception ex) {
                 errorMsg.setForeground(Color.RED);

@@ -6,6 +6,7 @@
 package javaprojectinterface;
 
 import TTTWebApplication.TTTWebService;
+import static java.lang.Thread.sleep;
 import javax.swing.JLabel;
 
 /**
@@ -15,16 +16,63 @@ import javax.swing.JLabel;
 public class MainGame extends javax.swing.JFrame {
     private TTTWebService proxy;
     private int gameID;
+    public final Runnable playerTurn;
+    public final Runnable checkPlayerJoin;
+    private String previousBoard;
+    private int userID;
 
     
-    public MainGame(TTTWebService proxy, int gameID) {
+    public MainGame(TTTWebService proxy, int gameID, int userID) {
+        
+        playerTurn = new Runnable() {
+            public void run() {
+                while(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
+                    try {
+                   sleep(5000);
+                } catch( Exception e){
+                    System.out.println(e);
+                }
+                String board = proxy.getBoard(gameID);
+                System.out.println(previousBoard);
+                if (!(board.matches(previousBoard))) {
+                    previousBoard = board;
+                    String[] boardArr = splitBoard(board);
+                    String pid = getTurn(boardArr);
+                    //updateBoard(boardArr);
+                
+                    }
+               
+                }
+                System.out.println("made it here");
+            }
+        };
+        
+        checkPlayerJoin = new Runnable() {
+            //put in checks on integer.parseInts
+          public void run() {
+              int gameState = Integer.parseInt(proxy.getGameState(gameID));
+              while(gameState == -1) {
+                  if(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
+                      startPlayerThread();
+                      gameState = 0;
+                  }
+              }
+          }  
+        };
         
         this.proxy = proxy;
         this.gameID = gameID;
-        proxy.setGameState(this.gameID, 0);
+        this.userID = userID;
+        previousBoard = proxy.getBoard(gameID);
+        proxy.setGameState(this.gameID, -1);
+        new Thread(this.checkPlayerJoin).start();
         initComponents();
         this.setTitle("Tic Tac Toe");
         this.setVisible(true);
+    }
+    
+    public void startPlayerThread() {
+        new Thread(this.playerTurn).start();
     }
     
     public void changeState(int state) {
@@ -37,6 +85,20 @@ public class MainGame extends javax.swing.JFrame {
     
     public void updatePlayer() {
         
+    }
+    
+    public String getTurn(String[] boardArr) {
+        //TODO index out of bounds when first move
+        String secondLastMove = boardArr[boardArr.length - 2];
+        secondLastMove = secondLastMove.replace("{", "");
+        secondLastMove = secondLastMove.replace("}", "");
+        String[] moveArr = secondLastMove.split(",");
+        return moveArr[0];
+    }
+    
+    public String[] splitBoard(String board) {
+        String [] boardArr = board.split("\n");
+        return boardArr;
     }
 
     @SuppressWarnings("unchecked")
