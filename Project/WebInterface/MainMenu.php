@@ -2,13 +2,13 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once('memoryChecks.php');
-require_once('./SoapInterface.php');
+require_once('MemoryChecks.php');
+require_once('./WebServiceHandler.php');
 require_once('./Utilities.php');
 $memoryTest = new memoryChecks();
 $memoryTest->checkCredentials();
 $utilities = new Utilities();
-$interface = new SoapInterface();
+$interface = new WebServiceHandler();
 $userID = $utilities->getUserID();
 $username = $utilities->getUserName();
 $openGames = $interface->showOpenGames();
