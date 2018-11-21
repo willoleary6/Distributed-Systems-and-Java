@@ -16,11 +16,11 @@ import javax.swing.table.*;
  * @author Aidan
  */
 public class JavaProjectInterface extends JFrame implements ActionListener {
-    private JLabel title, errorMsg;
-    private JFrame frame;
+    private JLabel title, errorMessage;
+    private JFrame frame, frame2;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
-    private JPanel panel;
-    private JTable lbTable, gameTable;
+    private JPanel panel, panel2;
+    private JTable leaderboardTable, gameTable;
     private JTextField username, name, surname;
     private JPasswordField password;
     TTTWebService_Service link;
@@ -66,7 +66,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     public void login() {
         username = new JTextField(20);
         password = new JPasswordField(20);
-        errorMsg = new JLabel("");
+        errorMessage = new JLabel("");
         
         login = new JButton("Login");
         login.addActionListener(this);
@@ -84,7 +84,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         panel.add(password);
         panel.add(login);
         panel.add(registerLink);
-        panel.add(errorMsg);
+        panel.add(errorMessage);
         
         frame.setTitle("Tic Tac Toe - Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,12 +94,11 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     }
     
     public void register() {
-        
         username = new JTextField(20);
         password = new JPasswordField(20);
         name = new JTextField(20);
         surname = new JTextField(20);
-        errorMsg = new JLabel("");
+        errorMessage = new JLabel("");
         register = new JButton("Register");
         register.addActionListener(this);
         loginLink = new JButton("Login");
@@ -120,7 +119,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         panel.add(register);
         panel.add(loginLink);
         panel.add(new JLabel(""));
-        panel.add(errorMsg);
+        panel.add(errorMessage);
         
         frame.setTitle("Tic Tac Toe - Register");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,12 +181,29 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+    
+    public void leaderboard() {
+        leaderboardTable = new JTable();
+        leaderboardTable.setBounds(20, 20, 320, 400);
+        
+        panel2 = new JPanel();
+        panel2.setLayout(null);
+        panel2.setBackground(Color.white);
+        frame2.getContentPane().add(panel2);
+        panel2.add(leaderboardTable);
+         
+        frame2.setTitle("Tic Tac Toe - Leaderboard");
+        frame2.setSize(400, 300);
+        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame2.setLocationRelativeTo(null);
+        frame2.setVisible(true);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         //TODO add error check + sql injection
-        if(source == login) {
+        if (source == login) {
             /*int result;
             result = proxy.login(username.getText(), password.getText());
             if(result > 0) {
@@ -196,19 +212,19 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 gameScreen();
             /*}
             else{
-                errorMsg.setText("Login Unsuccesful");
-                errorMsg.setForeground(Color.RED);
+                errorMessage.setText("Login Unsuccesful");
+                errorMessage.setForeground(Color.RED);
             }*/
         }
-        else if(source == loginLink){
+        else if (source == loginLink) {
             frame.getContentPane().removeAll();
             login();
         }
-        else if(source == registerLink){
+        else if (source == registerLink) {
             frame.getContentPane().removeAll();
             register();
         }
-        else if(source == register) {
+        else if (source == register) {
             String result = proxy.register(username.getText(), password.getText(),
                     name.getText(), surname.getText());
             try {
@@ -217,27 +233,51 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 frame.getContentPane().removeAll();
                 gameScreen();
             } catch( Exception ex) {
-                errorMsg.setForeground(Color.RED);
+                errorMessage.setForeground(Color.RED);
                 System.out.println(result);
                 System.out.println(username.getText());
                 switch(result) {
                     case "ERROR-REPEAT":
-                        errorMsg.setText("Repeated entry");
+                        errorMessage.setText("Repeated entry");
                         break;
                     case "ERROR-INSERT":
-                        errorMsg.setText("Couldnt Add entry");
+                        errorMessage.setText("Couldnt Add entry");
                         break;
                     case "ERROR-RETRIEVE":
-                        errorMsg.setText("couldnt Retrive data");
+                        errorMessage.setText("couldnt Retrive data");
                         break;
                     case "ERROR-DB":
-                        errorMsg.setText("cannot find DB");
+                        errorMessage.setText("cannot find DB");
                         break;
                 }
-                
+            }
+        }
+        else if(source == createGame) {
+            frame.getContentPane().removeAll();
+            // TODO create game
+        }
+        else if(source == scoreSystem) {
+            frame.getContentPane().removeAll();
+            // TODO create game
+        }
+        else if(source == leaderboard) {
+            frame.getContentPane().removeAll();
+            leaderboard();
+        }
+        else if(source == logout) {
+            int opt;
+            opt = JOptionPane.showConfirmDialog(null, "Are you sure you wish to log out?", "Log out", JOptionPane.YES_NO_OPTION);
+            
+            switch (opt) {
+                case JOptionPane.YES_OPTION:
+                    JOptionPane.showMessageDialog(null, "Successfully logged out");
+                    frame.getContentPane().removeAll();
+                    login();
+                    break;
+                case JOptionPane.NO_OPTION:    
+                    hide();
+                    break;
             }
         }
     }
-    
-    
 }
