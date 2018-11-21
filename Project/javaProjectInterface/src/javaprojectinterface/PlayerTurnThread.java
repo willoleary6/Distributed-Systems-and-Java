@@ -5,15 +5,10 @@
  */
 package javaprojectinterface;
 
-
 /**
  *
  * @author Aidan
  */
-public class testClass {
+public class PlayerTurnThread {
     
-    public static void main(String [] args){
-    
-    JavaProjectInterface main = new JavaProjectInterface();
-    }
 }
