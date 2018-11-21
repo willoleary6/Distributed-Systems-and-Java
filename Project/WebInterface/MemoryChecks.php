@@ -3,7 +3,7 @@ class memoryChecks{
     private $config;
     public function __construct()
     {
-        $this->config = include('config.php');
+        $this->config = include('Config.php');
     }
 
     public function checkCredentials(){
@@ -14,7 +14,7 @@ class memoryChecks{
     }
     public function checkGameID(){
         if(!isset($_SESSION[$this->config['gameID']])) {
-            header( "Location: mainMenu.php" );
+            header( "Location: MainMenu.php" );
         }
     }
 }

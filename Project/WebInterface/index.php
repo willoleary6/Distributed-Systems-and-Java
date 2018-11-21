@@ -3,9 +3,9 @@
         session_start();
     }
 
-    $config = include('config.php');
+    $config = include('Config.php');
     if(isset($_COOKIE[$config['cookieUserId']]) AND isset($_COOKIE[$config['cookieUsername']])) {
-        header('Location: mainMenu.php');
+        header('Location: UserValidation.php');
     }
 ?>
 <!DOCTYPE HTML>
