@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aa8a9718-935c-40a2-8b7f-c3046a1028aa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../TTTWebApplication/nbproject/ant-deploy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TTTWebApplication/nbproject/ant-deploy.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javaProjectInterface/src/javaprojectinterface/JavaProjectInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/../javaProjectInterface/src/javaprojectinterface/JavaProjectInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javaProjectInterface/src/javaprojectinterface/MainGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/../javaProjectInterface/src/javaprojectinterface/MainGame.java" afterDir="false" />
-    </list>
+    <list default="true" id="aa8a9718-935c-40a2-8b7f-c3046a1028aa" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +59,7 @@
     <session id="329707288">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -168,8 +163,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="55" lean-forward="true" selection-start-line="19" selection-start-column="55" selection-end-line="19" selection-end-column="55" />
+            <state relative-caret-position="425">
+              <caret line="25" column="63" lean-forward="true" selection-start-line="25" selection-start-column="63" selection-end-line="25" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -391,7 +386,7 @@
       <workItem from="1542580331959" duration="1981000" />
       <workItem from="1542627826698" duration="2881000" />
       <workItem from="1542800982765" duration="5476000" />
-      <workItem from="1542841566040" duration="917000" />
+      <workItem from="1542841566040" duration="1255000" />
     </task>
     <servers />
   </component>
@@ -401,11 +396,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105129000" />
+    <option name="totallyTimeSpent" value="105467000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2552" y="360" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1705757" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -508,8 +502,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="55" lean-forward="true" selection-start-line="19" selection-start-column="55" selection-end-line="19" selection-end-column="55" />
+        <state relative-caret-position="425">
+          <caret line="25" column="63" lean-forward="true" selection-start-line="25" selection-start-column="63" selection-end-line="25" selection-end-column="63" />
         </state>
       </provider>
     </entry>
