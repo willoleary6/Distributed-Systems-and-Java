@@ -87,6 +87,79 @@
             $gameState = $this->interface->setGameState($this->getGameID(), $newGameState);
             return $gameState;
         }
+
+        function getAllMyOpenGames(){
+           $myOpenGames =  $this->interface->showMyOpenGames($this->getUserID());
+           return $myOpenGames;
+        }
+
+        function getAllMyGames(){
+            $myOpenGames =  $this->interface->showAllMyGames($this->getUserID());
+            return $myOpenGames;
+        }
+
+        function getLeagueTable(){
+            $leagueTables =  $this->interface->getLeagueTable();
+            return $leagueTables;
+        }
+
+        function getAllOpenGames(){
+            $OpenGames =  $this->interface->showOpenGames($this->getUserID());
+            //now removing games with users ID
+            if($OpenGames != "ERROR-NOGAMES") {
+                $listOfOpenGames = explode("\n",$OpenGames);
+                $filteredOpenGames = "";
+                for($i = 0; $i < sizeof($listOfOpenGames); $i++){
+                    $openGameArray = explode(",",$listOfOpenGames[$i]);
+                    if($openGameArray[1] != $this->getUsername()){
+                        $filteredOpenGames = $filteredOpenGames.$listOfOpenGames[$i];
+                        if($i < sizeof($listOfOpenGames)-1){
+                            $filteredOpenGames = $filteredOpenGames."\n" ;
+                        }
+                    }
+                }
+                if($filteredOpenGames == ""){
+                    return "ERROR-NOGAMES";
+                }
+                return $filteredOpenGames;
+            }else{
+                return $OpenGames;
+            }
+
+
+        }
+
+        function calculateUserStats(){
+            $wins = 0;
+            $losses = 0;
+            $leagueTables =  $this->interface->getLeagueTable();
+            $userName = $this->getUsername();
+            $gameDetails =  explode("\n",$leagueTables);
+
+            for($i = 0; $i < sizeof($gameDetails); $i++){
+                $details = explode(",",$gameDetails[$i]);
+                if($details[1] == $userName){
+                    if($details[3] == 1){
+                        $wins++;
+                    }else if($details[3] == 2){
+                        $losses++;
+                    }
+                }else if($details[2] == $userName){
+                    if($details[3] == 2){
+                        $wins++;
+                    }else if($details[3] == 1){
+                        $losses++;
+                    }
+                }
+            }
+            $userStats = (object) [
+                'username' => $userName,
+                'wins' => $wins,
+                'losses' => $losses
+            ];
+            $userStats = json_encode($userStats);
+            return $userStats;
+        }
     }
 
     $utilities = new Utilities();
@@ -136,3 +209,24 @@
             echo 1;
         }
     }
+
+    if (isset($_POST['getAllMyOpenGames'])) {
+       echo $utilities->getAllMyOpenGames();
+    }
+
+    if (isset($_POST['getAllOpenGames'])) {
+        echo $utilities->getAllOpenGames();
+    }
+
+    if (isset($_POST['getAllMyGames'])) {
+        echo $utilities->getAllMyGames();
+    }
+
+    if (isset($_POST['getLeagueTable'])) {
+        echo $utilities->getLeagueTable();
+    }
+
+    if (isset($_POST['calculateUserStats'])) {
+        echo $utilities->calculateUserStats();
+    }
+
