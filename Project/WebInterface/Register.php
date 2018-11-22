@@ -1,12 +1,7 @@
 <?php
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-
-    $config = include('Config.php');
-    if(isset($_COOKIE[$config['cookieUserId']]) AND isset($_COOKIE[$config['cookieUsername']])) {
-        header('Location: UserValidation.php');
-    }
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html class="no-js" lang="en">
@@ -36,7 +31,6 @@
 
     <!-- favicons
     ================================================== -->
-
 </head>
 
 <body id="top">
@@ -51,12 +45,14 @@
 
         <div class="row home-content__main">
             <div >
-                <form action="UserValidation.php?login=true" method="post">
+                <form action="UserValidation.php?register=true" method="post">
                     Username: <input type="text" name="username"><br>
                     Password: <input type="password" name="password"><br>
-                    <button type="submit">Login</button>
+                    Forename: <input type="text" name="forename"><br>
+                    Surname: <input type="text" name="surname"><br>
+                    <button type="submit">rEGISTER</button>
                 </form>
-                <a href="Register.php">No Account? Register Here!</a>
+                <a href="index.php">Already have an Account? Login Here!</a>
             </div>
         </div> <!-- end home-content__main -->
 
