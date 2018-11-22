@@ -9,6 +9,7 @@ import TTTWebApplication.TTTWebService;
 import TTTWebApplication.TTTWebService_Service;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 /**
@@ -21,12 +22,11 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     private int userID, gameID;
     //private JFrame frame;
    // private JButton login, register, registerLink, createGame;
-    private JPanel panel, gamePanel;
     //private JTextField username, password, name, surname;
-    private JLabel title, errorMessage;
+    private JLabel title, errorMessage, successLabel;
     private JFrame frame, frame2;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
-    //private JPanel panel, panel2;
+    private JPanel panel, panel2, gamePanel;
     private JTable leaderboardTable, gameTable;
     private JTextField username, name, surname;
     private JPasswordField password;
@@ -240,39 +240,39 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         //TODO add error check + sql injection
-        if(source == login){
+        if (source == login) {
             userID = proxy.login(username.getText(), password.getText());
             if(userID > 0) {
                 System.out.print("Successful");
                 frame.getContentPane().removeAll();
                 gameScreen();
-            /*}
+            }
             else{
                 errorMessage.setText("Login Unsuccesful");
                 errorMessage.setForeground(Color.RED);
-            }*/
+            }
         }
         else if (source == loginLink) {
-            frame.getContentPane().removeAll();
+           frame.getContentPane().removeAll();     
             login();
         }
         else if (source == registerLink) {
-            frame.getContentPane().removeAll();
-            register();
+                frame.getContentPane().removeAll();
+                register();
         }
         else if (source == register) {
             String result = proxy.register(username.getText(), password.getText(),
-                    name.getText(), surname.getText());
+            name.getText(), surname.getText());
             try {
                 userID = Integer.parseInt(result);
                 System.out.println("success " + userID);
                 frame.getContentPane().removeAll();
                 gameScreen();
-            } catch( Exception ex) {
+            } catch( Exception ex)  {
                 errorMessage.setForeground(Color.RED);
                 System.out.println(result);
                 System.out.println(username.getText());
-                setErrorMsg(result);
+                setErrorMessage(result);
             }
         }
         else if(source == createGame){
@@ -282,16 +282,39 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 System.out.println("success " + gameID);
                 games.add(new MainGame(proxy, gameID, userID));
                 successLabel.setText("Successfully created game");
-            } catch( Exception ex) {
-                errorMsg.setForeground(Color.RED);
+            } catch( Exception ex)  {
+                errorMessage.setForeground(Color.RED);
                 System.out.println(result);
                 System.out.println(username.getText());
-                setErrorMsg(result);
+                setErrorMessage(result);
+            }
+        }
+        else if(source == scoreSystem) {
+            frame.getContentPane().removeAll();
+            // TODO create game
+        }
+        else if(source == leaderboard) {
+            frame.getContentPane().removeAll();
+            leaderboard();
+        }
+        else if(source == logout) {
+            int opt;
+            opt = JOptionPane.showConfirmDialog(null, "Are you sure you wish to log out?", "Log out", JOptionPane.YES_NO_OPTION);
+            
+            switch (opt) {
+                case JOptionPane.YES_OPTION:
+                    JOptionPane.showMessageDialog(null, "Successfully logged out");
+                    frame.getContentPane().removeAll();
+                    login();
+                    break;
+                case JOptionPane.NO_OPTION:    
+                    hide();
+                    break;
             }
         }
     }
     
-    private void setErrorMsg (String error) {
+    private void setErrorMessage (String error) {
         switch(error) {
             case "ERROR-REPEAT":
                 errorMessage.setText("Repeated entry");
@@ -334,5 +357,5 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                     hide();
                     break;
             }*/
-       }
 }
+
