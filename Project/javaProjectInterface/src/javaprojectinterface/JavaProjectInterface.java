@@ -20,6 +20,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     //private JLabel errorMsg, successLabel;
     private ArrayList<MainGame> games = new ArrayList<MainGame>();
     private int userID, gameID;
+    private String [][]tableData;
     //private JFrame frame;
    // private JButton login, register, registerLink, createGame;
     //private JTextField username, password, name, surname;
@@ -136,42 +137,19 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     }
     
     public void gameScreen() {
-        /*errorMsg = new JLabel("");
-        successLabel = new JLabel("");
-        createGame = new JButton("Create Game");
-        createGame.addActionListener(this);
-        
-        panel = new JPanel();
-        //gamePanel = new JPanel();
-        //gamePanel.setLayout(new GridLayout(3,3));
-        panel.setLayout(new GridLayout(2,2));
-        panel.setBackground(Color.white);
-        frame.getContentPane().add(panel);
-        //frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
-        panel.add(createGame);
-        panel.add(successLabel);
-        panel.add(new JLabel("Password:"));
-        panel.add(password);
-        /*gamePanel.add(new JLabel("Name:"), BorderLayout.CENTER);
-        gamePanel.add(new JLabel("Name:"));
-        gamePanel.add(new JLabel("Surname:"));
-        gamePanel.add(new JLabel("Name:"));
-        gamePanel.add(new JLabel("Name:"));
-        gamePanel.add(new JLabel(""));
-        gamePanel.add(new JLabel("Name:"));
-        gamePanel.add(new JLabel("Name:"));
-        gamePanel.add(new JLabel("Name:"));
-        
-        frame.setTitle("Game");
-        
-        Dimension dim =  new Dimension(3000, 1240);*/
-        
-        // Example
-        String data[][] = {
+        String result = proxy.showOpenGames();
+        String [] resultArr = result.split("\n");
+        tableData = new String[resultArr.length][3];
+        for(int i = 0; i < resultArr.length;i++) {
+            String [] game = resultArr[i].split(",");
+            for(int j = 0; j < game.length; j++)
+                tableData[i][j] = game[j];
+        }
+        /*String data[][] = {
             {"23","ChunkyMitts", "Available"},
             {"651","dxfc", "Available"},
-        };
-        String cols[] = {"Game","Host", "Status"};
+        };*/
+        String cols[] = {"Game","Host", "Date started"};
         
         createGame = new JButton("Create Game");
         createGame.setBounds(20, 20, 140, 30);
@@ -189,7 +167,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         logout.setBounds(20, 390, 140, 30);
         logout.addActionListener(this);
         
-        gameTable = new JTable(data, cols) {
+        gameTable = new JTable(tableData, cols) {
             @Override
             public boolean isCellEditable(int r, int c) {
                 return false;
@@ -201,6 +179,23 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         gameTable.setBorder(BorderFactory.createCompoundBorder());
         //gameTable.setBackground(Color.white);
         gameTable.setShowGrid(true);
+        gameTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        gameTable.setRowSelectionAllowed(true);
+        
+        gameTable.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+              if (e.getClickCount() == 2) {
+                JTable target = (JTable)e.getSource();
+                int row = target.getSelectedRow();
+                String result = proxy.joinGame(userID, Integer.parseInt(tableData[row][0]));
+                if(Integer.parseInt(result) == 1)
+                    games.add(new MainGame(proxy, Integer.parseInt(tableData[row][0]), userID, 2));
+              }
+            }
+          });
+        
+        JScrollPane pane = new JScrollPane(gameTable);
+        pane.setBounds(200, 20, 320, 400);
         
         panel = new JPanel();
         panel.setLayout(null);
@@ -210,7 +205,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         panel.add(scoreSystem);
         panel.add(leaderboard);   
         panel.add(logout);
-        panel.add(gameTable);
+        panel.add(pane);
        
         frame.setTitle("Tic Tac Toe");
         frame.setSize(560, 480);
@@ -280,7 +275,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             try {
                 gameID = Integer.parseInt(result);
                 System.out.println("success " + gameID);
-                games.add(new MainGame(proxy, gameID, userID));
+                games.add(new MainGame(proxy, gameID, userID, 1));
                 successLabel.setText("Successfully created game");
             } catch( Exception ex)  {
                 errorMessage.setForeground(Color.RED);
