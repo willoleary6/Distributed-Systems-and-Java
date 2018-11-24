@@ -241,15 +241,15 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         //TODO add error check + sql injection
         if (source == login) {
             userID = proxy.login(username.getText(), password.getText());
-            if(userID > 0) {
-                System.out.print("Successful");
+            //if(userID > 0) {
+               // System.out.print("Successful");
                 frame.getContentPane().removeAll();
                 gameScreen();
-            }
-            else{
-                errorMessage.setText("Login Unsuccesful");
-                errorMessage.setForeground(Color.RED);
-            }
+            //}
+            //else{
+              //  errorMessage.setText("Login Unsuccesful");
+               // errorMessage.setForeground(Color.RED);
+           // }
         }
         else if (source == loginLink) {
            frame.getContentPane().removeAll();     
@@ -291,13 +291,13 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         else if(source == scoreSystem) {
             frame.getContentPane().removeAll();
             // TODO create game
-            //ScoreSystem scoreSystem = new ScoreSystem(loggedInUser.getText());
             scoreSystem.setVisible(true);
+            
         }
         else if(source == leaderboard) {
-            frame.getContentPane().removeAll();
-            Leaderboard leaderboard = new Leaderboard();
-            leaderboard.setVisible(true);
+           Leaderboard leaderboard = new Leaderboard(proxy.leagueTable());
+           leaderboard.setVisible(true);
+            
         }
         else if(source == logout) {
             int opt;
