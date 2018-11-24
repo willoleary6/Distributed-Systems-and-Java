@@ -15,7 +15,7 @@
     <!--- basic page needs
     ================================================== -->
     <meta charset="utf-8">
-    <title>Transcend</title>
+    <title>Tic-Tac-To</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -41,7 +41,7 @@
 
 <body id="top">
 
-<!-- home
+<!-- login
 ================================================== -->
 <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=top>
 
@@ -58,18 +58,12 @@
                 </form>
                 <a href="Register.php">No Account? Register Here!</a>
             </div>
-        </div> <!-- end home-content__main -->
+        </div>
 
-    </div> <!-- end home-content -->
+    </div>
 
-</section> <!-- end s-home -->
+</section>
 
-
-
-
-
-<!-- stats
-================================================== -->
 
 <!-- preloader
 ================================================== -->

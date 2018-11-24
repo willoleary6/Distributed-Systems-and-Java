@@ -237,24 +237,56 @@ $memoryTest->checkCredentials();
     </style>
     <html>
         <body>
-            <h1>main menu</h1>
 
-            <h2>
-                Open games
-            </h2>
-            <div id = "allOpenGames">
-            </div>
-            <h2>
-                All my games
-            </h2>
-            <div id = "allMyGames">
-            </div>
 
-            <h2>
-                All my open games
+        </body>
+    </html>
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Tic-Tac-To</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="js/modernizr.js"></script>
+    <script src="js/pace.min.js"></script>
+
+    <!-- favicons
+    ================================================== -->
+
+</head>
+
+<body id="top">
+
+<!-- home
+================================================== -->
+<section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=top>
+
+    <div class="shadow-overlay"></div>
+
+    <div class="home-content">
+        <div class="col-block service-item">
+            <h2 class="h2">
+                Menu
             </h2>
-            <div id = "allMyOpenGames">
-            </div>
             <br>
             <div>
                 <button onclick="newGame()">new Game</button>
@@ -267,10 +299,49 @@ $memoryTest->checkCredentials();
             <div>
                 <button onclick="logout()">Logout</button>
             </div>
+        </div>
 
-        </body>
-    </html>
+        <div class="col-block service-item">
+            <h2 class="h2">
+                Open games
+            </h2>
+            <div id = "allOpenGames">
+            </div>
+        </div>
+        <div class="col-block service-item">
+            <h2 class="h2">
+                All my games
+            </h2>
+            <div id = "allMyGames">
+            </div>
+        </div>
+        <div class=" col-block service-item">
+            <h2 class="h2">
+                All my open games
+            </h2>
+            <div id = "allMyOpenGames">
+            </div>
+        </div>
+
+    </div>
+
+</section>
 
 
+<!-- preloader
+================================================== -->
+<div id="preloader">
+    <div id="loader">
+    </div>
+</div>
 
+
+<!-- Java Script
+================================================== -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
 

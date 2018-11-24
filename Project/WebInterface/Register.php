@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <!--- basic page needs
     ================================================== -->
     <meta charset="utf-8">
-    <title>Transcend</title>
+    <title>Tic-Tac-To</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -54,18 +54,12 @@ if (session_status() == PHP_SESSION_NONE) {
                 </form>
                 <a href="index.php">Already have an Account? Login Here!</a>
             </div>
-        </div> <!-- end home-content__main -->
+        </div>
 
-    </div> <!-- end home-content -->
+    </div>
 
-</section> <!-- end s-home -->
+</section>
 
-
-
-
-
-<!-- stats
-================================================== -->
 
 <!-- preloader
 ================================================== -->

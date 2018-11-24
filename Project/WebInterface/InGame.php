@@ -132,6 +132,8 @@ $utilities = new Utilities();
          * previous moves made in this game
          */
         const buildBoard = (previousMovesString) => {
+            // update current board for use in checkers.
+            nameSpace.currentTicBoard = previousMovesString;
             // split string into individual moves.
             let previousMoves = previousMovesString.split("\n");
             // assuming we are working with a 3x3 board
@@ -148,6 +150,7 @@ $utilities = new Utilities();
             }
             // access the board div
             let element = document.getElementById('board');
+            //element.className = 'boardButton';
             // clear out any previous boards
             element.innerHTML ='';
             let table = document.createElement("table");
@@ -159,11 +162,12 @@ $utilities = new Utilities();
                     let button = document.createElement("button");
                     // if that tile has already been clicked, disable it.
                     if(board[i][j]) {
-                        button.innerHTML = board[i][j];
+                        button.innerHTML = whatSymbolIsAssignedToThisId(board[i][j]);
                         button.disable = true;
                     }else{
                         button.innerHTML = "click";
                     }
+                    button.className = 'boardButton';
                     // setting its coordinates as the value
                     button.value = i+","+j;
                     button.onclick = () => tileClicked(button.value);
@@ -173,8 +177,21 @@ $utilities = new Utilities();
                 table.appendChild(tableRow);
             }
             element.appendChild(table);
-            // update current board for use in checkers.
-            nameSpace.currentTicBoard = previousMovesString;
+        }
+
+        /**
+         * Function that calculates what symbol to use when a tile is taken based on who took the first tile
+         * (They get the X!)
+         */
+        const whatSymbolIsAssignedToThisId = (userIDNumber) => {
+            let boardMoves = nameSpace.currentTicBoard;
+            let firstMove = boardMoves.split("\n")[0];
+            let firstMoveUserID = firstMove.split(",")[0];
+            if(userIDNumber == firstMoveUserID){
+                return "X";
+            }else{
+                return "Y";
+            }
         }
 
         /**
@@ -286,18 +303,76 @@ $utilities = new Utilities();
             })
         }
 </script>
-<style>
-    table, th, td {
-        border: 1px solid black;
-    }
-</style>
-<html>
-    <body>
-    <h1 id="gameStatus">Waiting on player 2 to join</h1>
-    <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
-    <div id="board" disabled=false>
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
 
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Tic-Tac-To</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="js/modernizr.js"></script>
+    <script src="js/pace.min.js"></script>
+
+    <!-- favicons
+    ================================================== -->
+
+</head>
+
+<body id="top">
+
+<!-- in game
+================================================== -->
+<section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=top>
+
+    <div class="shadow-overlay"></div>
+
+    <div class="home-content">
+
+        <div class="row home-content__main">
+            <div >
+                <h2 id="gameStatus" class="h2">Waiting on player 2 to join</h2>
+                <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
+                <div id="board" disabled=false>
+                </div>
+            </div>
+        </div> <!-- end home-content__main -->
+
+    </div> <!-- end home-content -->
+
+</section> <!-- end s-home -->
+
+
+
+<!-- preloader
+================================================== -->
+<div id="preloader">
+    <div id="loader">
     </div>
-    </body>
+</div>
+
+
+<!-- Java Script
+================================================== -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+</body>
 </html>
 

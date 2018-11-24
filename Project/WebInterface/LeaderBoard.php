@@ -16,6 +16,10 @@ $memoryTest->checkCredentials();
         getLeagueTable : () => getLeagueTable(),
         calculateUserStats : () => calculateUserStats(),
     };
+
+    /**
+     * Function that makes an ajax call to get the games currently in progress or who have already won.
+     */
     const getLeagueTable = () => {
         $.ajax({
             type:"post",
@@ -30,6 +34,9 @@ $memoryTest->checkCredentials();
         });
     }
 
+    /**
+     * Function that makes a ajax call to the webservice which calculates the current users stats.
+     */
     const calculateUserStats = () => {
         $.ajax({
             type:"post",
@@ -43,6 +50,11 @@ $memoryTest->checkCredentials();
             }
         });
     }
+
+    /**
+     * Function that builds the HTML list storing the current users stats
+     * @param stats JSON object with the number of user wins,losses and the ratio between them.
+     */
 
     const buildUserStatsTable = (stats) => {
         let element = document.getElementById('userStats');
@@ -72,6 +84,10 @@ $memoryTest->checkCredentials();
         element.appendChild(unOrderedList);
     }
 
+    /**
+     * Function that builds the HTML table storing all the games currently in play or have ended.
+     * @param listOfGames \n separated string containing all the games currently in progress or have been completed.
+     */
     const buildLeaderBoardTable = (listOfGames) => {
         leaderBoardNameSpace.currentLeagueTable = listOfGames;
         let element = document.getElementById('leaderBoard');
@@ -83,6 +99,7 @@ $memoryTest->checkCredentials();
             let tr = document.createElement("tr");
             let gameDetailsArray = gameDetails.split(',');
             gameDetailsArray.forEach((detail, index) => {
+                // instead of 0 - 3 added some text for easy human consumption.
                 if(index == 3){
                     detail = formatGameStatus(detail);
                 }
@@ -96,6 +113,10 @@ $memoryTest->checkCredentials();
         element.appendChild(table);
     }
 
+    /**
+     * Little function that builds the headers for the league table
+     * @returns {HTMLElement} row of th's with each column header
+     */
     const generateTableHeaders = () => {
         let arrayHeaders = ["Game Id", "Player 1", "Player 2", "Status", "Date"];
         let tr = document.createElement("tr");
@@ -107,6 +128,12 @@ $memoryTest->checkCredentials();
         })
         return tr;
     }
+
+    /**
+     * Method that takes a numeric input of the game state and returns the relevant string associated with that numeric.
+     * @param rawValue
+     * @returns {string}
+     */
 
     const formatGameStatus = (rawValue) => {
         switch(rawValue) {
@@ -126,9 +153,13 @@ $memoryTest->checkCredentials();
                 return "Draw";
                 break;
             default:
-                return "Some crazy shit must have went down in this case";
+                return "Some crazy shit must have went down.";
         }
     }
+
+    /**
+     * Function that contains and ajax function that pulls the league table keeping it updated.
+     */
 
     const checkLeaderBoard = () => {
         $.ajax({
@@ -161,23 +192,78 @@ $memoryTest->checkCredentials();
     }
 
 </script>
-<style>
-    table, th, td {
-        border: 1px solid black;
-    }
-</style>
-<html>
-    <body>
-        <h1>
-            Leader Board
-        </h1>
-        <div id = "userStats">
-        </div>
-        <div id = "leaderBoard">
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Tic-Tac-To</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- script
+    ================================================== -->
+    <script src="js/modernizr.js"></script>
+    <script src="js/pace.min.js"></script>
+
+    <!-- favicons
+    ================================================== -->
+
+</head>
+
+<body id="top">
+
+<!-- LeaderBoard and league table
+================================================== -->
+<section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="images/hero-bg.jpg" data-natural-width=3000 data-natural-height=2000 data-position-y=top>
+
+    <div class="shadow-overlay"></div>
+
+    <div class="home-content">
+
+        <div class="row home-content__main">
+            <h2 class="h2">
+                Leader Board
+            </h2>
+            <div id = "userStats">
+            </div>
+            <div id = "leaderBoard">
+            </div>
+
+            <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
+            <br>
         </div>
 
-        <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
-        <br>
+    </div>
 
-    </body>
+</section>
+
+<!-- preloader
+================================================== -->
+<div id="preloader">
+    <div id="loader">
+    </div>
+</div>
+
+
+<!-- Java Script
+================================================== -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+</body>
 </html>
