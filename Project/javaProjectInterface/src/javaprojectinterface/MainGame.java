@@ -6,74 +6,128 @@
 package javaprojectinterface;
 
 import TTTWebApplication.TTTWebService;
-import static java.lang.Thread.sleep;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /**
  *
  * @author Aidan
  */
-public class MainGame extends javax.swing.JFrame {
+public class MainGame extends javax.swing.JFrame implements WindowListener {
     private TTTWebService proxy;
     private int gameID;
     private boolean lock;
-    public final Runnable playerTurn;
-    public final Runnable checkPlayerJoin;
+    private int gameState;
+    public final Runnable playerTurn, checkPlayerJoin, checkWinThread;
     private String previousBoard;
     private int userID;
+    private int playerNum;
+    public boolean terminateThreads;
 
     
-    public MainGame(TTTWebService proxy, int gameID, int userID) {
+    public MainGame(TTTWebService proxy, int gameID, int userID, int playerNum) {
         
         playerTurn = new Runnable() {
             public void run() {
-                while(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
+                while(Integer.parseInt(proxy.getGameState(gameID)) == 0 && !terminateThreads) {
                     try {
-                   sleep(2000);
+                   Thread.currentThread().sleep(500);
                 } catch( Exception e){
                     System.out.println(e);
                 }
+                    System.out.println("Player Turn thread sleep check");
                 String board = proxy.getBoard(gameID);
                 if(board.matches("ERROR-NOMOVES")) {
-                    jLabelPlayer.setText("No move made by either player");
+                    jLabelPlayer.setText("No move made yet");
                     lock = false;
                 }
                 else if (!(board.matches(previousBoard))) {
                     previousBoard = board;
                     String[] boardArr = splitBoard(board);
+                    if(boardArr.length == 1)
+                        startWinThread();
                     getTurn(boardArr);
                     updateBoard(boardArr);
                 
                     }
                
                 }
-                System.out.println("made it here");
+                System.out.println("Thread ended");
+            }
+        };
+        
+        checkWinThread = new Runnable() {
+            public void run() {
+                String winState = proxy.checkWin(gameID);
+                while(Integer.parseInt(winState) == 0 && !terminateThreads) {
+                    try {
+                   Thread.currentThread().sleep(1000);
+                } catch( Exception e){
+                    System.out.println(e);
+                }
+                    System.out.println("win thread sleep check");
+                    if(Integer.parseInt(proxy.checkWin(gameID)) != 0) {
+                        winState = proxy.checkWin(gameID);
+                        switch(winState) {
+                            case "1":
+                                jLabelPlayer.setText("Player 1 wins");
+                                break;
+                            case "2":
+                                jLabelPlayer.setText("Player 2 wins");
+                                break;
+                            case "3":
+                                jLabelPlayer.setText("Draw");
+                                break;
+                        }
+                        lock = true;
+                    }
+                }
+                System.out.println("thread Finished");
             }
         };
         
         checkPlayerJoin = new Runnable() {
             //put in checks on integer.parseInts
           public void run() {
-              int gameState = Integer.parseInt(proxy.getGameState(gameID));
-              while(gameState == -1) {
+              while(gameState == -1 && !terminateThreads) {
+                  try {
+                   Thread.currentThread().sleep(1000);
+                } catch( Exception e){
+                    System.out.println(e);
+                }
+                  System.out.println("Player Join sleep check");
                   if(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
                       startPlayerThread();
                       lock = false;
                       gameState = 0;
                   }
               }
+              System.out.println("Thread ended");
           }  
         };
+        
+        this.playerNum = playerNum;
         
         this.lock = true;
         this.proxy = proxy;
         this.gameID = gameID;
         this.userID = userID;
         previousBoard = proxy.getBoard(gameID);
-        proxy.setGameState(this.gameID, -1);
-        new Thread(this.checkPlayerJoin).start();
+        if(playerNum == 1) {
+            proxy.setGameState(this.gameID, -1);
+            gameState = Integer.parseInt(proxy.getGameState(gameID));
+            new Thread(this.checkPlayerJoin).start();
+        }
+        else if(playerNum == 2) {
+            proxy.setGameState(this.gameID, 0);
+            startPlayerThread();
+            lock = false;
+            gameState = 0;
+        }
         initComponents();
+        jLabelPlayerNum.setText("U is Playa:" + playerNum );
+        terminateThreads = false;
+        addWindowListener(this);
         this.setTitle("Tic Tac Toe");
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         this.setVisible(true);
@@ -81,6 +135,10 @@ public class MainGame extends javax.swing.JFrame {
     
     public void startPlayerThread() {
         new Thread(this.playerTurn).start();
+    }
+    
+    public void startWinThread(){
+        new Thread(this.checkWinThread).start();
     }
     
     public void changeState(int state) {
@@ -101,16 +159,25 @@ public class MainGame extends javax.swing.JFrame {
             switch (y) {
                 case 0:
                     jPanel1.remove(jButton1);
+                     if(playerNum == 2)
+                jPanel1.add(jLabelX,0,0);
+            else
                     jPanel1.add(jLabelO,0,0);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton2);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX1, 0, 1);
+            else 
                     jPanel1.add(jLabelO1,0,1);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton3);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX2, 0, 2);
+            else 
                     jPanel1.add(jLabelO2,0,2);
                     jPanel1.revalidate();
                     break;
@@ -119,16 +186,25 @@ public class MainGame extends javax.swing.JFrame {
             switch (y) {
                 case 0:
                     jPanel1.remove(jButton4);
+                     if(playerNum == 2)
+                jPanel1.add(jLabelX4, 0, 3);
+            else 
                     jPanel1.add(jLabelO3,0,3);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton5);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX5, 0, 4);
+            else 
                     jPanel1.add(jLabelO4,0,4);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton6);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX3, 0, 5);
+            else 
                     jPanel1.add(jLabelO5,0,5);
                     jPanel1.revalidate();
                     break;
@@ -137,16 +213,25 @@ public class MainGame extends javax.swing.JFrame {
             switch (y) {
                 case 0:
                     jPanel1.remove(jButton7);
+                     if(playerNum == 2)
+                jPanel1.add(jLabelX8, 0, 6);
+            else 
                     jPanel1.add(jLabelO6,0,6);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton8);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX7, 0, 7);
+            else 
                     jPanel1.add(jLabelO7,0,7);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton9);
+                    if(playerNum == 2)
+                jPanel1.add(jLabelX6, 0, 8);
+            else 
                     jPanel1.add(jLabelO8,0,8);
                     jPanel1.revalidate();
                     break;
@@ -243,6 +328,8 @@ public class MainGame extends javax.swing.JFrame {
         jLabelO6 = new javax.swing.JLabel();
         jLabelO7 = new javax.swing.JLabel();
         jLabelO8 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -254,8 +341,8 @@ public class MainGame extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabelPlayer = new javax.swing.JLabel();
+        jLabelPlayerNum = new javax.swing.JLabel();
         errorMsgLabel = new javax.swing.JLabel();
 
         jLabelX.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
@@ -344,6 +431,10 @@ public class MainGame extends javax.swing.JFrame {
         jLabelO8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelO8.setText("O");
 
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("jLabel2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridLayout(3, 3, 10, 10));
@@ -425,13 +516,14 @@ public class MainGame extends javax.swing.JFrame {
         });
         jPanel1.add(jButton9);
 
-        jPanel2.setLayout(new java.awt.GridLayout(1, 3));
+        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        jLabel1.setText("Turn: ");
-        jPanel2.add(jLabel1);
-
-        jLabelPlayer.setText("Player");
+        jLabelPlayer.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabelPlayer.setText("waiting on player 2");
         jPanel2.add(jLabelPlayer);
+
+        jLabelPlayerNum.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(jLabelPlayerNum);
         jPanel2.add(errorMsgLabel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -441,9 +533,9 @@ public class MainGame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(307, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,73 +544,118 @@ public class MainGame extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        checkAndTakeMove(0, 0);
-        jPanel1.remove(jButton1);
-        jPanel1.add(jLabelX,0,0);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(0, 0);
+            jPanel1.remove(jButton1);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX,0,0);
+            else
+                jPanel1.add(jLabelO,0,0);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        checkAndTakeMove(0, 1);
-        jPanel1.remove(jButton2);
-        jPanel1.add(jLabelX1, 0, 1);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(0, 1);
+            jPanel1.remove(jButton2);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX1, 0, 1);
+            else 
+                jPanel1.add(jLabelO1, 0, 1);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        checkAndTakeMove(0, 2);
-        jPanel1.remove(jButton3);
-        jPanel1.add(jLabelX2,0,2);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(0, 2);
+            jPanel1.remove(jButton3);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX2, 0, 2);
+            else 
+                jPanel1.add(jLabelO2, 0, 2);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        checkAndTakeMove(1, 2);
-        jPanel1.remove(jButton6);
-        jPanel1.add(jLabelX3,0,5);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(1, 2);
+            jPanel1.remove(jButton6);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX3, 0, 5);
+            else 
+                jPanel1.add(jLabelO3, 0, 5);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        checkAndTakeMove(1, 0);
-        jPanel1.remove(jButton4);
-        jPanel1.add(jLabelX4,0,3);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(1, 0);
+            jPanel1.remove(jButton4);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX4, 0, 3);
+            else 
+                jPanel1.add(jLabelO4, 0, 3);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        checkAndTakeMove(1, 1);
-        jPanel1.remove(jButton5);
-        jPanel1.add(jLabelX5,0,4);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(1, 1);
+            jPanel1.remove(jButton5);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX5, 0, 4);
+            else 
+                jPanel1.add(jLabelO5, 0, 4);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        checkAndTakeMove(2, 2);
-        jPanel1.remove(jButton9);
-        jPanel1.add(jLabelX6,0,8);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(2, 2);
+            jPanel1.remove(jButton9);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX6, 0, 8);
+            else 
+                jPanel1.add(jLabelO6, 0, 8);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        checkAndTakeMove(2, 1);
-        jPanel1.remove(jButton8);
-        jPanel1.add(jLabelX7,0,7);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(2, 1);
+            jPanel1.remove(jButton8);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX7, 0, 7);
+            else 
+                jPanel1.add(jLabelO7, 0, 7);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        checkAndTakeMove(2, 0);
-        jPanel1.remove(jButton7);
-        jPanel1.add(jLabelX8,0,6);
-        jPanel1.revalidate();
+        if(gameState == 0 && !lock) {
+            checkAndTakeMove(2, 0);
+            jPanel1.remove(jButton7);
+            if(playerNum == 1)
+                jPanel1.add(jLabelX8, 0, 6);
+            else 
+                jPanel1.add(jLabelO8, 0, 6);
+            jPanel1.revalidate();
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jButton1PropertyChange
@@ -538,6 +675,7 @@ public class MainGame extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelO;
     private javax.swing.JLabel jLabelO1;
     private javax.swing.JLabel jLabelO2;
@@ -548,6 +686,7 @@ public class MainGame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelO7;
     private javax.swing.JLabel jLabelO8;
     private javax.swing.JLabel jLabelPlayer;
+    private javax.swing.JLabel jLabelPlayerNum;
     private javax.swing.JLabel jLabelX;
     private javax.swing.JLabel jLabelX1;
     private javax.swing.JLabel jLabelX2;
@@ -561,4 +700,40 @@ public class MainGame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+         terminateThreads = true;//To change body of generated methods, choose Tools | Templates.
+         System.out.println("method call check");
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        dispose(); //To change body of generated methods, choose Tools | Templates.
+    }
 }
