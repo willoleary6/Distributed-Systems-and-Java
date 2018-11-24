@@ -24,7 +24,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     //private JFrame frame;
    // private JButton login, register, registerLink, createGame;
     //private JTextField username, password, name, surname;
-    private JLabel title, errorMessage, successLabel;
+    private JLabel title, errorMessage, successLabel, loggedInUser;
     private JFrame frame, frame2;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
     private JPanel panel, panel2, gamePanel;
@@ -161,7 +161,10 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         
         leaderboard = new JButton("Leaderboard");
         leaderboard.setBounds(20, 100, 140, 30);
-        leaderboard.addActionListener(this);      
+        leaderboard.addActionListener(this);
+        
+        loggedInUser = new JLabel(username.getText());
+        loggedInUser.setBounds(20, 360, 140, 30);
         
         logout = new JButton("Logout");
         logout.setBounds(20, 390, 140, 30);
@@ -203,7 +206,8 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         frame.getContentPane().add(panel);
         panel.add(createGame);
         panel.add(scoreSystem);
-        panel.add(leaderboard);   
+        panel.add(leaderboard);
+        panel.add(loggedInUser);   
         panel.add(logout);
         panel.add(pane);
        
@@ -287,10 +291,13 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         else if(source == scoreSystem) {
             frame.getContentPane().removeAll();
             // TODO create game
+            //ScoreSystem scoreSystem = new ScoreSystem(loggedInUser.getText());
+            scoreSystem.setVisible(true);
         }
         else if(source == leaderboard) {
             frame.getContentPane().removeAll();
-            leaderboard();
+            Leaderboard leaderboard = new Leaderboard();
+            leaderboard.setVisible(true);
         }
         else if(source == logout) {
             int opt;
