@@ -7,8 +7,6 @@ package javaprojectinterface;
 
 import TTTWebApplication.TTTWebService;
 import javax.swing.table.*;
-// thread for leaderboard
-
 
 /**
  *
@@ -25,13 +23,7 @@ public class Leaderboard extends javax.swing.JFrame {
         refreshLeaderboard = new Runnable() {
             public void run() {
                 while(proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES")) {
-                    //System.out.print("\nThread running");
-                    
-                    newLeaderTable = proxy.leagueTable();
-                    System.out.println(leaderTable);
-                    System.out.println("===============================");
-                    System.out.print("\n" + newLeaderTable);
-                    
+                    newLeaderTable = proxy.leagueTable();                   
                     leaderTable ="";
                     
                     if (!newLeaderTable.equals(leaderTable)) {
@@ -48,22 +40,9 @@ public class Leaderboard extends javax.swing.JFrame {
                             System.out.print(", loop" + i);
                             String[] game = results[i].split(",");
                             finalLeagueTable[i] = game;
-
-                            //if (!model.equals(finalLeagueTable[i]))
-                                model.addRow(finalLeagueTable[i]);
+                            model.addRow(finalLeagueTable[i]);
                         }
-
-                        /*try {
-                            Thread.currentThread().sleep(5000);
-                        } catch (Exception ex) {
-                            System.out.print(ex);
-                        }*/
-                        //leaderboardTable.setVisible(false);
-                        //leaderboardTable.setVisible(true);
                     }
-                    
-                    //leaderTable = newLeaderTable;
-                    System.out.print(", Repeat");
                     
                     try {
                         Thread.currentThread().sleep(5000);
@@ -75,21 +54,6 @@ public class Leaderboard extends javax.swing.JFrame {
         };
         
         initComponents();
-        /*leaderTable = leagueTable;
-        // System.out.println(leaderTable);
-        
-        results = leaderTable.split("\n");
-        finalLeagueTable = new String [results.length][];
-        
-        model = new DefaultTableModel();
-        model = (DefaultTableModel)leaderboardTable.getModel();
-
-        for (int i = 0; i < results.length; i++) {
-            String[] game = results[i].split(",");
-            
-            finalLeagueTable[i] = game;
-            model.addRow(finalLeagueTable[i]);
-        }*/
         startLeaderboardThread();
     }
     
