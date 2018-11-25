@@ -19,7 +19,7 @@ public class Leaderboard extends javax.swing.JFrame {
     public Leaderboard(String leagueTable) {
         initComponents();
         
-        System.out.print(leagueTable);
+        //System.out.print(leagueTable);
         String[] results = leagueTable.split("\n");
         String[][] finalLeagueTable = new String [results.length][];
         

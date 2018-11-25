@@ -289,7 +289,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             }
         }
         else if(source == scoreSystem) {
-            ScoreSystem scoreSystem = new ScoreSystem(loggedInUser.getText());
+            ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
             scoreSystem.setVisible(true);
             
         }

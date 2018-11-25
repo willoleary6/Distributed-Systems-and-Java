@@ -76,12 +76,10 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                             case "2":
                                 jLabelPlayer.setText("Player 2 wins");
                                 proxy.setGameState(gameID, 2);
-                                gameState = 2;
                                 break;
                             case "3":
                                 jLabelPlayer.setText("Draw");
                                 proxy.setGameState(gameID, 3);
-                                gameState = 3;
                                 break;
                         }
                         lock = true;

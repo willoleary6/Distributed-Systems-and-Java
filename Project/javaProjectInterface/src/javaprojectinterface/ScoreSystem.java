@@ -12,13 +12,17 @@ package javaprojectinterface;
 public class ScoreSystem extends javax.swing.JFrame {
     /**
      * Creates new form ScoreSystem
+     * @param leagueTable
      * @param user
      */
-    public ScoreSystem(String user) {
+    public ScoreSystem(String leagueTable, String user) {
         initComponents();
+        int[] stats;
         //int g, w, l, d, wgr;
-        System.out.print(user);
+        //System.out.print(user);
         playerName.setText(user);
+        stats = calculatePlayerStats(leagueTable);
+        System.out.printf("%s, %s, %s", stats[0], stats[1], stats[2]);
         
         numberOfGames.setText(numberOfGames.getText() + "\t " + "16");
         numberOfWins.setText(numberOfWins.getText() + "\t " + "9");
@@ -26,6 +30,38 @@ public class ScoreSystem extends javax.swing.JFrame {
         numberOfLosses.setText(numberOfLosses.getText() + "\t " + "6");
         playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + "0.56");
     }
+    
+    public int[]  calculatePlayerStats(String leagueTable) {
+        int wins = 0, draws = 0, losses = 0, status;
+        int[] stats = {wins, draws, losses};    
+            //leagueTable =  $this->interface->getLeagueTable();
+            //$gameDetails =  explode("\n",$leagueTables);
+        String[] results = leagueTable.split("\n");
+        String[][] finalLeagueTable = new String [results.length][];
+        
+        for (String result : results) {
+            String[] game = result.split(",");
+            status = Integer.parseInt(game[3]);
+            if(game[1].equals(playerName.getText())) {
+                switch (status) {
+                    case 1:     wins++;     break;
+                    case 2:     losses++;   break;
+                    case 3:     draws++;    break;
+                    default:                        break;
+                }
+            }
+            else if (game[2].equals(playerName.getText())) {
+                switch (status) {
+                    case 1:     losses++;     break;
+                    case 2:     wins++;   break;
+                    case 3:     draws++;    break;
+                    default:                        break;
+                }
+            }
+        }
+         return stats;
+    }
+         
 
     /**
      * This method is called from within the constructor to initialize the form.
