@@ -1,10 +1,4 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: willo
-     * Date: 17/11/2018
-     * Time: 11:19
-     */
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -98,9 +92,34 @@
             return $myOpenGames;
         }
 
-        function getLeagueTable(){
+        function getLeaderBoard(){
             $leagueTables =  $this->interface->getLeagueTable();
-            return $leagueTables;
+            $gameDetails =  explode("\n",$leagueTables);
+            $arrayOfUsers = array();
+            for($i = 0; $i < sizeof($gameDetails); $i++) {
+                $details = explode(",", $gameDetails[$i]);
+                if($this->isUserUnique($arrayOfUsers, $details[1])){
+                    array_push($arrayOfUsers,$details[1]);
+                }
+                if($this->isUserUnique($arrayOfUsers, $details[2])){
+                    array_push($arrayOfUsers,$details[2]);
+                }
+            }
+
+            $usersStates = array();
+            for($i = 0; $i < sizeof($arrayOfUsers); $i++){
+                array_push($usersStates,$this->calculateUserStats($arrayOfUsers[$i]));
+            }
+            return json_encode($usersStates);
+        }
+
+        private function isUserUnique($arrayOfUsers, $newUser){
+            for($i = 0; $i < sizeof($arrayOfUsers); $i++ ){
+                if($arrayOfUsers[$i] == $newUser){
+                    return false;
+                }
+            }
+            return true;
         }
 
         function getAllOpenGames(){
@@ -129,11 +148,11 @@
 
         }
 
-        function calculateUserStats(){
+        function calculateUserStats($userName){
             $wins = 0;
             $losses = 0;
+            $draws = 0;
             $leagueTables =  $this->interface->getLeagueTable();
-            $userName = $this->getUsername();
             $gameDetails =  explode("\n",$leagueTables);
 
             for($i = 0; $i < sizeof($gameDetails); $i++){
@@ -143,19 +162,24 @@
                         $wins++;
                     }else if($details[3] == 2){
                         $losses++;
+                    }else{
+                        $draws++;
                     }
                 }else if($details[2] == $userName){
                     if($details[3] == 2){
                         $wins++;
                     }else if($details[3] == 1){
                         $losses++;
+                    } else{
+                        $draws++;
                     }
                 }
             }
             $userStats = (object) [
                 'username' => $userName,
                 'wins' => $wins,
-                'losses' => $losses
+                'losses' => $losses,
+                'draws' => $draws,
             ];
             $userStats = json_encode($userStats);
             return $userStats;
@@ -223,10 +247,10 @@
     }
 
     if (isset($_POST['getLeagueTable'])) {
-        echo $utilities->getLeagueTable();
+        echo $utilities->getLeaderBoard();
     }
 
     if (isset($_POST['calculateUserStats'])) {
-        echo $utilities->calculateUserStats();
+        echo $utilities->calculateUserStats($utilities->getUsername());
     }
 

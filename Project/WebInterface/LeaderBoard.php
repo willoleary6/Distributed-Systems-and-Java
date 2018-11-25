@@ -1,113 +1,46 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-require_once('MemoryChecks.php');
-require_once('./WebServiceHandler.php');
-require_once('./Utilities.php');
-$memoryTest = new memoryChecks();
-$memoryTest->checkCredentials();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once('MemoryChecks.php');
+    require_once('./WebServiceHandler.php');
+    require_once('./Utilities.php');
+    $memoryTest = new memoryChecks();
+    $memoryTest->checkCredentials();
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 
     let leaderBoardNameSpace = {
         currentLeagueTable: undefined,
-        getLeagueTable : () => getLeagueTable(),
-        calculateUserStats : () => calculateUserStats(),
     };
 
     /**
-     * Function that makes an ajax call to get the games currently in progress or who have already won.
+     * Function that builds the HTML table storing all the users stats.
+     * @param listOfUsers array of JSONs containing users statistics.
      */
-    const getLeagueTable = () => {
-        $.ajax({
-            type:"post",
-            url:"Utilities.php",
-            data:{
-                getLeagueTable: true,
-            },
-            cache:false,
-            success: (results) => {
-                buildLeaderBoardTable(results);
-            }
-        });
-    }
-
-    /**
-     * Function that makes a ajax call to the webservice which calculates the current users stats.
-     */
-    const calculateUserStats = () => {
-        $.ajax({
-            type:"post",
-            url:"Utilities.php",
-            data:{
-                calculateUserStats: true,
-            },
-            cache:false,
-            success: (results) => {
-                buildUserStatsTable(JSON.parse(results));
-            }
-        });
-    }
-
-    /**
-     * Function that builds the HTML list storing the current users stats
-     * @param stats JSON object with the number of user wins,losses and the ratio between them.
-     */
-
-    const buildUserStatsTable = (stats) => {
-        let element = document.getElementById('userStats');
-        element.innerHTML ='';
-        let unOrderedList = document.createElement("ul");
-        let username = document.createElement("li");
-        let usernameTextNode = document.createTextNode("Username: "+stats.username);
-        username.appendChild(usernameTextNode);
-        unOrderedList.appendChild(username);
-
-        let wins = document.createElement("li");
-        let winsTextNode = document.createTextNode("Wins: "+stats.wins);
-        wins.appendChild(winsTextNode);
-        unOrderedList.appendChild(wins);
-
-        let losses = document.createElement("li");
-        let lossesTextNode = document.createTextNode("Losses: "+stats.losses);
-        losses.appendChild(lossesTextNode);
-        unOrderedList.appendChild(losses);
-
-        let winLossRatio = document.createElement("li");
-        let winLossRatioTextNode = document.createTextNode("Win/Loss Ratio: "+parseFloat(stats.wins/stats.losses));
-        winLossRatio.appendChild(winLossRatioTextNode);
-        unOrderedList.appendChild(winLossRatio);
-
-
-        element.appendChild(unOrderedList);
-    }
-
-    /**
-     * Function that builds the HTML table storing all the games currently in play or have ended.
-     * @param listOfGames \n separated string containing all the games currently in progress or have been completed.
-     */
-    const buildLeaderBoardTable = (listOfGames) => {
-        leaderBoardNameSpace.currentLeagueTable = listOfGames;
+    const buildLeaderBoardTable = (listOfUsers) => {
+        leaderBoardNameSpace.currentLeagueTable = listOfUsers;
         let element = document.getElementById('leaderBoard');
         element.innerHTML ='';
-        let gamesArray = listOfGames.split("\n");
+        let arrayParse = JSON.parse(listOfUsers);
+        let leaderBoard = [];
+        arrayParse.forEach((rawJson) => {
+            leaderBoard.push(JSON.parse(rawJson));
+        });
         let table = document.createElement("table");
         table.appendChild(generateTableHeaders());
-        gamesArray.forEach((gameDetails) => {
+        leaderBoard.sort((a, b) => parseFloat(a.wins) + parseFloat(b.wins));
+        leaderBoard.forEach((userStats) => {
             let tr = document.createElement("tr");
-            let gameDetailsArray = gameDetails.split(',');
-            gameDetailsArray.forEach((detail, index) => {
-                // instead of 0 - 3 added some text for easy human consumption.
-                if(index == 3){
-                    detail = formatGameStatus(detail);
+            for (let key in userStats) {
+                if (userStats.hasOwnProperty(key)) {
+                    let td = document.createElement("td");
+                    let textNode = document.createTextNode(userStats[key]);
+                    td.appendChild(textNode);
+                    tr.appendChild(td);
                 }
-               let td = document.createElement("td");
-               let textNode = document.createTextNode(detail);
-               td.appendChild(textNode);
-               tr.appendChild(td);
-            });
+            }
             table.appendChild(tr);
         });
         element.appendChild(table);
@@ -118,7 +51,7 @@ $memoryTest->checkCredentials();
      * @returns {HTMLElement} row of th's with each column header
      */
     const generateTableHeaders = () => {
-        let arrayHeaders = ["Game Id", "Player 1", "Player 2", "Status", "Date"];
+        let arrayHeaders = ["Username", "Wins", "Losses", "Draws"];
         let tr = document.createElement("tr");
         arrayHeaders.forEach((header) => {
             let th = document.createElement("th");
@@ -129,36 +62,9 @@ $memoryTest->checkCredentials();
         return tr;
     }
 
-    /**
-     * Method that takes a numeric input of the game state and returns the relevant string associated with that numeric.
-     * @param rawValue
-     * @returns {string}
-     */
-
-    const formatGameStatus = (rawValue) => {
-        switch(rawValue) {
-            case "-1":
-                return "not started yet";
-                break;
-            case "0":
-                return "In progress";
-                break;
-            case "1":
-                return "Player 1 won";
-                break;
-            case "2":
-                return "Player 2 won";
-                break;
-            case "3":
-                return "Draw";
-                break;
-            default:
-                return "Some crazy shit must have went down.";
-        }
-    }
 
     /**
-     * Function that contains and ajax function that pulls the league table keeping it updated.
+     * Function that contains and ajax function that pulls the leaderboard keeping it updated.
      */
 
     const checkLeaderBoard = () => {
@@ -170,16 +76,12 @@ $memoryTest->checkCredentials();
             },
             cache:false,
             success: (results) => {
-                if(results != leaderBoardNameSpace.currentLeagueTable){
-                    getLeagueTable();
+                if(results !== leaderBoardNameSpace.currentLeagueTable){
+                    buildLeaderBoardTable(results);
                 }
             }
         });
     }
-
-    leaderBoardNameSpace.getLeagueTable();
-    leaderBoardNameSpace.calculateUserStats();
-
 
     if(window.Worker){
         leaderBoardNameSpace.worker = new Worker('UpdateWorker.js');
@@ -236,14 +138,11 @@ $memoryTest->checkCredentials();
 
         <div class="row home-content__main">
             <h2 class="h2">
-                Leader Board
+                LeaderBoard
             </h2>
-            <div id = "userStats">
-            </div>
+            <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
             <div id = "leaderBoard">
             </div>
-
-            <button onclick="location.href = 'mainMenu.php';">back to main menu</button>
             <br>
         </div>
 

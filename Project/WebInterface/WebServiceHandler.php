@@ -1,11 +1,4 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: willo
-     * Date: 09/11/2018
-     * Time: 19:32
-     */
-
     class WebServiceHandler
     {
         private $proxyInstance;

@@ -1,15 +1,15 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-require_once('MemoryChecks.php');
-require_once('./WebServiceHandler.php');
-require_once('./Utilities.php');
-$memoryTest = new memoryChecks();
-$memoryTest->checkCredentials();
-$memoryTest->checkGameID();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once('MemoryChecks.php');
+    require_once('./WebServiceHandler.php');
+    require_once('./Utilities.php');
+    $memoryTest = new memoryChecks();
+    $memoryTest->checkCredentials();
+    $memoryTest->checkGameID();
 
-$utilities = new Utilities();
+    $utilities = new Utilities();
 
 ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -329,8 +329,6 @@ $utilities = new Utilities();
     <script src="js/modernizr.js"></script>
     <script src="js/pace.min.js"></script>
 
-    <!-- favicons
-    ================================================== -->
 
 </head>
 
@@ -351,11 +349,11 @@ $utilities = new Utilities();
                 <div id="board" disabled=false>
                 </div>
             </div>
-        </div> <!-- end home-content__main -->
+        </div>
 
-    </div> <!-- end home-content -->
+    </div>
 
-</section> <!-- end s-home -->
+</section>
 
 
 

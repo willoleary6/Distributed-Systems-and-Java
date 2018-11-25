@@ -5,34 +5,63 @@
  */
 package javaprojectinterface;
 
+import TTTWebApplication.TTTWebService;
 import javax.swing.table.*;
 
 /**
  *
- * @author aaron
+ * @author Aaron
  */
 public class Leaderboard extends javax.swing.JFrame {
+    private String leaderTable, newLeaderTable;
+    private String[] results;
+    private String[][] finalLeagueTable;
+    private DefaultTableModel model;
+    public final Runnable refreshLeaderboard;
+    
+    public Leaderboard(TTTWebService proxy,String leagueTable) {
+        refreshLeaderboard = new Runnable() {
+            public void run() {
+                while(proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES")) {
+                    newLeaderTable = proxy.leagueTable();                   
+                    leaderTable ="";
+                    
+                    if (!newLeaderTable.equals(leaderTable)) {
+                        leaderTable = newLeaderTable;
+                        System.out.print(", In if statement");
+                        results = newLeaderTable.split("\n");
+                        finalLeagueTable = new String [results.length][];
 
-    /**
-     * Creates new form Leaderboard
-     */
-    public Leaderboard(String leagueTable) {
+                        model = new DefaultTableModel();
+                        model = (DefaultTableModel)leaderboardTable.getModel();
+                        model.setRowCount(0);
+
+                        for (int i = 0; i < results.length; i++) {
+                            System.out.print(", loop" + i);
+                            String[] game = results[i].split(",");
+                            finalLeagueTable[i] = game;
+                            model.addRow(finalLeagueTable[i]);
+                        }
+                    }
+                    
+                    try {
+                        Thread.currentThread().sleep(5000);
+                    } catch (Exception ex) {
+                        System.out.print(ex);
+                    }
+                }
+            }
+        };
+        
         initComponents();
-        
-        String[] results = leagueTable.split("\n");
-        String[][] finalLeagueTable = new String [results.length][];
-        
-        DefaultTableModel model = new DefaultTableModel();
-        model = (DefaultTableModel)leaderboardTable.getModel();
-
-        for (int i = 0; i < results.length; i++) {
-            String[] game = results[i].split(",");
-            
-            finalLeagueTable[i] = game;
-            model.addRow(finalLeagueTable[i]);
-        }
+        startLeaderboardThread();
     }
-
+    
+    public void startLeaderboardThread() {
+        new Thread(this.refreshLeaderboard).start();
+    }
+                    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,8 +152,7 @@ public class Leaderboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        // TODO add your handling code here:
-        setVisible(false);
+       dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     /**
