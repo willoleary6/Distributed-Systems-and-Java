@@ -37,7 +37,7 @@ public class ScoreSystem extends javax.swing.JFrame {
         numberOfWins.setText(numberOfWins.getText() + "\t " + wins);
         numberOfDraws.setText(numberOfDraws.getText() + "\t " + draws);
         numberOfLosses.setText(numberOfLosses.getText() + "\t " + losses);
-        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + round(winGameRatio, 2));
+        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + (round(winGameRatio, 2) * 100) + "%");
     }
     
     public int[]  calculatePlayerStats(String leagueTable) {
@@ -61,7 +61,7 @@ public class ScoreSystem extends javax.swing.JFrame {
                     case 1:     games++;    losses++;  break;
                     case 2:     games++;    wins++;    break;
                     case 3:     games++;    draws++;   break;
-                    default:                        break;
+                    default:                           break;
                 }
             }
         }
