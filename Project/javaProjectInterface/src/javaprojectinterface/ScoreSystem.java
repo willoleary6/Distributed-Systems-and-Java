@@ -18,17 +18,24 @@ public class ScoreSystem extends javax.swing.JFrame {
     public ScoreSystem(String leagueTable, String user) {
         initComponents();
         int[] stats;
-        //int g, w, l, d, wgr;
+        int games, wins, draws, losses;
+        double winGameRatio;
         //System.out.print(user);
         playerName.setText(user);
         stats = calculatePlayerStats(leagueTable);
         System.out.printf("%s, %s, %s", stats[0], stats[1], stats[2]);
         
-        numberOfGames.setText(numberOfGames.getText() + "\t " + "16");
-        numberOfWins.setText(numberOfWins.getText() + "\t " + "9");
-        numberOfDraws.setText(numberOfDraws.getText() + "\t " + "1");
-        numberOfLosses.setText(numberOfLosses.getText() + "\t " + "6");
-        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + "0.56");
+        wins = stats[0];
+        draws = stats[1];
+        losses = stats[2];
+        games = (wins + draws + losses);
+        winGameRatio = (wins / games);
+                
+        numberOfGames.setText(numberOfGames.getText() + "\t "  + games);
+        numberOfWins.setText(numberOfWins.getText() + "\t " + wins);
+        numberOfDraws.setText(numberOfDraws.getText() + "\t " + draws);
+        numberOfLosses.setText(numberOfLosses.getText() + "\t " + losses);
+        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + winGameRatio);
     }
     
     public int[]  calculatePlayerStats(String leagueTable) {
@@ -42,24 +49,24 @@ public class ScoreSystem extends javax.swing.JFrame {
         for (String result : results) {
             String[] game = result.split(",");
             status = Integer.parseInt(game[3]);
-            if(game[1].equals(playerName.getText())) {
+            if (game[1].equals(playerName.getText())) {
                 switch (status) {
-                    case 1:     wins++;     break;
-                    case 2:     losses++;   break;
-                    case 3:     draws++;    break;
-                    default:                        break;
+                    case 1:     wins++;       break;
+                    case 2:     losses++;     break;
+                    case 3:     draws++;      break;
+                    default:                         break;
                 }
             }
             else if (game[2].equals(playerName.getText())) {
                 switch (status) {
                     case 1:     losses++;     break;
-                    case 2:     wins++;   break;
-                    case 3:     draws++;    break;
-                    default:                        break;
+                    case 2:     wins++;        break;
+                    case 3:     draws++;      break;
+                    default:                         break;
                 }
             }
         }
-         return stats;
+        return stats;
     }
          
 
