@@ -14,24 +14,27 @@ import javax.swing.*;
 import javax.swing.table.*;
 /**
  *
- * @author Aidan and Aaron
+ * @author Aidan
  */
 public class JavaProjectInterface extends JFrame implements ActionListener {
+    //private JLabel errorMsg, successLabel;
     private ArrayList<MainGame> games = new ArrayList<MainGame>();
     private int userID, gameID;
     private String [][]tableData;
     private JLabel title, errorMessage, successLabel, loggedInUser;
     private JFrame frame;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
-    private JPanel panel;
-    private JTable gameTable;
+    private JPanel panel, panel2, gamePanel;
+    private JTable leaderboardTable, gameTable;
     private JTextField username, name, surname;
     private JPasswordField password;
     TTTWebService_Service link;
     TTTWebService proxy;
    
 
-    public JavaProjectInterface() {         
+    public JavaProjectInterface() {
+        // TODO code application logic here
+        
         link = new TTTWebService_Service();
         proxy = link.getTTTWebServicePort();
         
@@ -273,7 +276,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             }            
         }
         else if(source == leaderboard) {
-           Leaderboard leaderboard = new Leaderboard(proxy, proxy.leagueTable());
+           Leaderboard leaderboard = new Leaderboard(proxy.leagueTable());
            leaderboard.setVisible(true);
             
         }

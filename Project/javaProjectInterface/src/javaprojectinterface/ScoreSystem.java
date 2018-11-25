@@ -12,21 +12,24 @@ import java.math.*;
  * @author Aaron
  */
 public class ScoreSystem extends javax.swing.JFrame {
-    private int[] playerStats, stats;
-    private int games, wins, draws, losses;
-    private double winGameRatio;
-    private String[] results;
-        
-    public ScoreSystem(String leagueTable, String user) {       
+    /**
+     * Creates new form ScoreSystem
+     * @param leagueTable
+     * @param user
+     */
+    public ScoreSystem(String leagueTable, String user) {
         initComponents();
-                        
-        playerName.setText(user);
-        playerStats = calculatePlayerStats(leagueTable);
+        int[] stats;
+        int games, wins, draws, losses;
+        double winGameRatio;
         
-        games = playerStats[0];
-        wins = playerStats[1];
-        draws = playerStats[2];
-        losses = playerStats[3];
+        playerName.setText(user);
+        stats = calculatePlayerStats(leagueTable);
+        
+        games = stats[0];
+        wins = stats[1];
+        draws = stats[2];
+        losses = stats[3];
         winGameRatio =  (((double) wins) / games);
                 
         numberOfGames.setText(numberOfGames.getText() + "\t "  + games);
@@ -34,13 +37,12 @@ public class ScoreSystem extends javax.swing.JFrame {
         numberOfDraws.setText(numberOfDraws.getText() + "\t " + draws);
         numberOfLosses.setText(numberOfLosses.getText() + "\t " + losses);
         playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + (round(winGameRatio, 2) * 100) + "%");
-        
     }
     
-    public int[] calculatePlayerStats(String leagueTable) {
-        int gameCount = 0, winCount = 0, drawCount = 0, lossCount = 0, status;
-        stats = new int[4];
-        results = leagueTable.split("\n");
+    public int[]  calculatePlayerStats(String leagueTable) {
+        int games = 0, wins = 0, draws = 0, losses = 0, status;
+        int[] stats = new int[4];
+        String[] results = leagueTable.split("\n");
         
         for (String result : results) {
             String[] game = result.split(",");
@@ -48,25 +50,25 @@ public class ScoreSystem extends javax.swing.JFrame {
             
             if (game[1].equals(playerName.getText()) && status != 0) {
                 switch (status) {
-                    case 1:     gameCount++;    winCount++;     break;
-                    case 2:     gameCount++;    lossCount++;    break;
-                    case 3:     gameCount++;    drawCount++;    break;
-                    default:                                    break;
+                    case 1:     games++;    wins++;    break;
+                    case 2:     games++;    losses++;  break;
+                    case 3:     games++;    draws++;   break;
+                    default:                           break;
                 }
             }
             else if (game[2].equals(playerName.getText()) && status != 0) {
                 switch (status) {
-                    case 1:     gameCount++;    lossCount++;    break;
-                    case 2:     gameCount++;    winCount++;     break;
-                    case 3:     gameCount++;    drawCount++;    break;
-                    default:                                    break;
+                    case 1:     games++;    losses++;  break;
+                    case 2:     games++;    wins++;    break;
+                    case 3:     games++;    draws++;   break;
+                    default:                           break;
                 }
             }            
         }
-        stats[0] = gameCount; 
-        stats[1] = winCount; 
-        stats[2] = drawCount; 
-        stats[3] = lossCount;
+        stats[0] = games; 
+        stats[1] = wins; 
+        stats[2] = draws; 
+        stats[3] = losses;
         
         return stats;
     }
@@ -187,7 +189,7 @@ public class ScoreSystem extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        dispose();
+        setVisible(false);
     }//GEN-LAST:event_closeButtonActionPerformed
 
     /**
