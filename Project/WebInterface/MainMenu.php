@@ -1,12 +1,12 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-require_once('MemoryChecks.php');
-require_once('./WebServiceHandler.php');
-require_once('./Utilities.php');
-$memoryTest = new memoryChecks();
-$memoryTest->checkCredentials();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once('MemoryChecks.php');
+    require_once('./WebServiceHandler.php');
+    require_once('./Utilities.php');
+    $memoryTest = new memoryChecks();
+    $memoryTest->checkCredentials();
 ?>
 <!DOCTYPE HTML>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -18,14 +18,21 @@ $memoryTest->checkCredentials();
             getAllMyGames: () => getAllMyGames(),
             worker: undefined,
         }
+
+        /**
+         * Function that prints out a list of open games the user can join.
+         * @param list String of join able games delimited by "\n".
+         */
         const printAllOpenGames = (list) => {
             let element = document.getElementById('allOpenGames');
             element.innerHTML = '';
+            // Checking that there is open games to join
             if(!list.startsWith('ERROR')) {
-                let arrayOfText = list.split("\n");
-                arrayOfText.forEach((text) => {
+                let arrayOfGames = list.split("\n");
+                arrayOfGames.forEach((text) => {
                     let node = document.createElement("ul");
                     let listItem = document.createElement("li");
+                    // Ensuring we print out actual games and not empty indexes of the array.
                     if(text != "") {
                         let textArray = text.split(",");
                         textArray.forEach((text) => {
@@ -46,6 +53,11 @@ $memoryTest->checkCredentials();
             }
         }
 
+        /**
+         * Function that executes an ajax request to join a currently open game.
+         * On Success the user will be redirected to the inGame page
+         * @param gameID id number of the game we wish to join.
+         */
         const joinGame = (gameID) => {
             $.ajax({
                 type:"post",
@@ -62,6 +74,9 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that executes an ajax request to create a new game and redirects the user to the InGame page.
+         */
         const newGame = () => {
             $.ajax({
                 type:"post",
@@ -75,6 +90,11 @@ $memoryTest->checkCredentials();
                 }
             });
         }
+
+        /**
+         * Function that allows a user to re enter a game they are currently participating in.
+         * @param gameID id number of the game we wish to re enter.
+         */
 
         const enterGame = (gameID) => {
             $.ajax({
@@ -91,8 +111,13 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that prints all the games the user is currently involved in.
+         * @param list String of the users games delimited by "\n".
+         */
         const printAllMyGames = (list) => {
             let element = document.getElementById('allMyGames');
+            // Checking that there is open games to join
             if(!list.startsWith('ERROR')) {
                 let arrayOfText = list.split("\n");
                 arrayOfText.forEach((text) => {
@@ -117,6 +142,9 @@ $memoryTest->checkCredentials();
 
         }
 
+        /**
+         * Function that executes an ajax request logging the user out and redirecting them to the index page.
+         */
         const logout = () => {
             $.ajax({
                 type:"post",
@@ -131,10 +159,16 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that prints out a list of all the users open games.
+         * @param list String of games delimited by "\n".
+         */
+
         const printAllMyOpenGames = (list) => {
             let element = document.getElementById('allMyOpenGames');
             if(!list.startsWith('ERROR')) {
                 let arrayOfText = list.split("\n");
+                // Checking that there is open games to join
                 arrayOfText.forEach((text) => {
                     let node = document.createElement("ul");
                     let listItem = document.createElement("li");
@@ -156,6 +190,10 @@ $memoryTest->checkCredentials();
             }
         }
 
+        /**
+         * Function that executes an ajax request to
+         * retrieve a list of all the users currently open games.
+         */
         const getAllMyOpenGames = () => {
             $.ajax({
                 type:"post",
@@ -170,6 +208,10 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that executes an ajax request to
+         * retrieve a list of all the open games.
+         */
         const getAllOpenGames = () => {
             $.ajax({
                 type:"post",
@@ -185,6 +227,10 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that executes an ajax request to
+         * retrieve a list of all the user's games.
+         */
         const getAllMyGames = () => {
             $.ajax({
                 type:"post",
@@ -199,6 +245,9 @@ $memoryTest->checkCredentials();
             });
         }
 
+        /**
+         * Function that updates the list of open games if there is a change in the webservice.
+         */
         const checkAllOpenGames = () => {
             $.ajax({
                 type:"post",
@@ -269,8 +318,6 @@ $memoryTest->checkCredentials();
     <script src="js/modernizr.js"></script>
     <script src="js/pace.min.js"></script>
 
-    <!-- favicons
-    ================================================== -->
 
 </head>
 

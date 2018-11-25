@@ -1,12 +1,12 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-require_once('MemoryChecks.php');
-require_once('./WebServiceHandler.php');
-require_once('./Utilities.php');
-$memoryTest = new memoryChecks();
-$memoryTest->checkCredentials();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    require_once('MemoryChecks.php');
+    require_once('./WebServiceHandler.php');
+    require_once('./Utilities.php');
+    $memoryTest = new memoryChecks();
+    $memoryTest->checkCredentials();
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>

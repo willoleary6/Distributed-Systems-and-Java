@@ -1,10 +1,4 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: willo
-     * Date: 17/11/2018
-     * Time: 11:19
-     */
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
