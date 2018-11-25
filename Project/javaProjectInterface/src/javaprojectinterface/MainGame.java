@@ -71,12 +71,15 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                         switch(winState) {
                             case "1":
                                 jLabelPlayer.setText("Player 1 wins");
+                                proxy.setGameState(gameID, 1);
                                 break;
                             case "2":
                                 jLabelPlayer.setText("Player 2 wins");
+                                proxy.setGameState(gameID, 2);
                                 break;
                             case "3":
                                 jLabelPlayer.setText("Draw");
+                                proxy.setGameState(gameID, 3);
                                 break;
                         }
                         lock = true;
@@ -125,7 +128,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
             gameState = 0;
         }
         initComponents();
-        jLabelPlayerNum.setText("U is Playa:" + playerNum );
+        jLabelPlayerNum.setText("U is Playa:" + playerNum);
         terminateThreads = false;
         addWindowListener(this);
         this.setTitle("Tic Tac Toe");
@@ -548,6 +551,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -24,7 +24,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     //private JFrame frame;
    // private JButton login, register, registerLink, createGame;
     //private JTextField username, password, name, surname;
-    private JLabel title, errorMessage, successLabel;
+    private JLabel title, errorMessage, successLabel, loggedInUser;
     private JFrame frame, frame2;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
     private JPanel panel, panel2, gamePanel;
@@ -145,10 +145,6 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             for(int j = 0; j < game.length; j++)
                 tableData[i][j] = game[j];
         }
-        /*String data[][] = {
-            {"23","ChunkyMitts", "Available"},
-            {"651","dxfc", "Available"},
-        };*/
         String cols[] = {"Game","Host", "Date started"};
         
         createGame = new JButton("Create Game");
@@ -161,7 +157,10 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         
         leaderboard = new JButton("Leaderboard");
         leaderboard.setBounds(20, 100, 140, 30);
-        leaderboard.addActionListener(this);      
+        leaderboard.addActionListener(this);
+        
+        loggedInUser = new JLabel(username.getText());
+        loggedInUser.setBounds(20, 360, 140, 30);
         
         logout = new JButton("Logout");
         logout.setBounds(20, 390, 140, 30);
@@ -177,9 +176,8 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         DefaultTableCellRenderer dtcr =  new DefaultTableCellRenderer();
         dtcr.setHorizontalAlignment(JLabel.CENTER);
         gameTable.setBorder(BorderFactory.createCompoundBorder());
-        //gameTable.setBackground(Color.white);
         gameTable.setShowGrid(true);
-        gameTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        gameTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         gameTable.setRowSelectionAllowed(true);
         
         gameTable.addMouseListener(new MouseAdapter() {
@@ -203,7 +201,8 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         frame.getContentPane().add(panel);
         panel.add(createGame);
         panel.add(scoreSystem);
-        panel.add(leaderboard);   
+        panel.add(leaderboard);
+        panel.add(loggedInUser);   
         panel.add(logout);
         panel.add(pane);
        
@@ -212,23 +211,6 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
-    
-    public void leaderboard() {
-        leaderboardTable = new JTable();
-        leaderboardTable.setBounds(20, 20, 320, 400);
-        
-        panel2 = new JPanel();
-        panel2.setLayout(null);
-        panel2.setBackground(Color.white);
-        frame2.getContentPane().add(panel2);
-        panel2.add(leaderboardTable);
-         
-        frame2.setTitle("Tic Tac Toe - Leaderboard");
-        frame2.setSize(400, 300);
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setLocationRelativeTo(null);
-        frame2.setVisible(true);
     }
 
     @Override
@@ -242,10 +224,10 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 frame.getContentPane().removeAll();
                 gameScreen();
             }
-            else{
-                errorMessage.setText("Login Unsuccesful");
+            else {
+               errorMessage.setText("Login Unsuccesful");
                 errorMessage.setForeground(Color.RED);
-            }
+           }
         }
         else if (source == loginLink) {
            frame.getContentPane().removeAll();     
@@ -285,12 +267,14 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             }
         }
         else if(source == scoreSystem) {
-            frame.getContentPane().removeAll();
-            // TODO create game
+            ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
+            scoreSystem.setVisible(true);
+            
         }
         else if(source == leaderboard) {
-            frame.getContentPane().removeAll();
-            leaderboard();
+           Leaderboard leaderboard = new Leaderboard(proxy.leagueTable());
+           leaderboard.setVisible(true);
+            
         }
         else if(source == logout) {
             int opt;
@@ -325,32 +309,5 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 break;
         }
     }    
-            
-       /*else if(source == createGame) {
-            frame.getContentPane().removeAll();
-            // TODO create game
-        }
-        else if(source == scoreSystem) {
-            frame.getContentPane().removeAll();
-            // TODO create game
-        }
-        else if(source == leaderboard) {
-            frame.getContentPane().removeAll();
-            leaderboard();
-        }
-        else if(source == logout) {
-            int opt;
-            opt = JOptionPane.showConfirmDialog(null, "Are you sure you wish to log out?", "Log out", JOptionPane.YES_NO_OPTION);
-            
-            switch (opt) {
-                case JOptionPane.YES_OPTION:
-                    JOptionPane.showMessageDialog(null, "Successfully logged out");
-                    frame.getContentPane().removeAll();
-                    login();
-                    break;
-                case JOptionPane.NO_OPTION:    
-                    hide();
-                    break;
-            }*/
 }
 
