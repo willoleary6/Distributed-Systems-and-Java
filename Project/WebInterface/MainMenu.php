@@ -342,6 +342,9 @@
             <div>
                 <button onclick="location.href = 'LeaderBoard.php';">Leaderboard</button>
             </div>
+            <div>
+                <button onclick="location.href = 'UserStats.php';">Stats</button>
+            </div>
             <br>
             <div>
                 <button onclick="logout()">Logout</button>
