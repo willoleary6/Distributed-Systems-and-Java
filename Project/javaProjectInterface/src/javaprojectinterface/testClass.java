@@ -15,7 +15,6 @@ public class testClass {
     public static void main(String [] args){
     
     JavaProjectInterface main = new JavaProjectInterface();
-    
     JavaProjectInterface newmain = new JavaProjectInterface();
     }
 }
