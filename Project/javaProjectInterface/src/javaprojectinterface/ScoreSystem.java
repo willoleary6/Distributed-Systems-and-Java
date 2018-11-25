@@ -12,9 +12,19 @@ package javaprojectinterface;
 public class ScoreSystem extends javax.swing.JFrame {
     /**
      * Creates new form ScoreSystem
+     * @param user
      */
-    public ScoreSystem() {
+    public ScoreSystem(String user) {
         initComponents();
+        //int g, w, l, d, wgr;
+        System.out.print(user);
+        playerName.setText(user);
+        
+        numberOfGames.setText(numberOfGames.getText() + "\t " + "16");
+        numberOfWins.setText(numberOfWins.getText() + "\t " + "9");
+        numberOfDraws.setText(numberOfDraws.getText() + "\t " + "1");
+        numberOfLosses.setText(numberOfLosses.getText() + "\t " + "6");
+        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + "0.56");
     }
 
     /**
@@ -29,15 +39,12 @@ public class ScoreSystem extends javax.swing.JFrame {
         playerLabel = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        numberOfGamesPlayed = new javax.swing.JLabel();
-        numberOfGamesLost = new javax.swing.JLabel();
-        wins = new javax.swing.JLabel();
-        losses = new javax.swing.JLabel();
-        numberOfGamesDrawn = new javax.swing.JLabel();
+        numberOfGames = new javax.swing.JLabel();
+        numberOfDraws = new javax.swing.JLabel();
+        numberOfWins = new javax.swing.JLabel();
+        numberOfLosses = new javax.swing.JLabel();
+        playerName = new javax.swing.JLabel();
+        playerWinGameRatio = new javax.swing.JLabel();
 
         playerLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -56,80 +63,49 @@ public class ScoreSystem extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Player Stats");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Player:");
+        numberOfGames.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        numberOfGames.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numberOfGames.setText("Games:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Games:");
+        numberOfDraws.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        numberOfDraws.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numberOfDraws.setText("Draws:");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Draws:");
+        numberOfWins.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        numberOfWins.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numberOfWins.setText("Wins:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Wins:");
+        numberOfLosses.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        numberOfLosses.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numberOfLosses.setText("Losses:");
 
-        numberOfGamesPlayed.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        numberOfGamesPlayed.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        numberOfGamesPlayed.setText("0");
+        playerName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        playerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        playerName.setText("Name");
 
-        numberOfGamesLost.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        numberOfGamesLost.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        numberOfGamesLost.setText("Losses:");
-
-        wins.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        wins.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        wins.setText("0");
-
-        losses.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        losses.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        losses.setText("0");
-
-        numberOfGamesDrawn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        numberOfGamesDrawn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        numberOfGamesDrawn.setText("0");
+        playerWinGameRatio.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        playerWinGameRatio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        playerWinGameRatio.setText("Win/Game Ratio:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(numberOfGamesDrawn, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(wins, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(numberOfGamesPlayed, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(numberOfGamesLost, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 123, Short.MAX_VALUE)
-                                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(losses, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
+                            .addComponent(playerWinGameRatio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numberOfLosses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numberOfDraws, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numberOfGames, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                            .addComponent(playerName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(numberOfWins, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -137,31 +113,21 @@ public class ScoreSystem extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(playerName, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addComponent(numberOfGames)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(numberOfGamesPlayed, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(numberOfWins)
+                .addGap(1, 1, 1)
+                .addComponent(numberOfDraws, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(numberOfLosses, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(wins, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numberOfGamesDrawn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numberOfGamesLost, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(losses, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(playerWinGameRatio, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -202,7 +168,7 @@ public class ScoreSystem extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ScoreSystem().setVisible(true);
+                //new ScoreSystem().setVisible(true);
             }
         });
     }
@@ -210,15 +176,12 @@ public class ScoreSystem extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel losses;
-    private javax.swing.JLabel numberOfGamesDrawn;
-    private javax.swing.JLabel numberOfGamesLost;
-    private javax.swing.JLabel numberOfGamesPlayed;
+    private javax.swing.JLabel numberOfDraws;
+    private javax.swing.JLabel numberOfGames;
+    private javax.swing.JLabel numberOfLosses;
+    private javax.swing.JLabel numberOfWins;
     private javax.swing.JLabel playerLabel;
-    private javax.swing.JLabel wins;
+    private javax.swing.JLabel playerName;
+    private javax.swing.JLabel playerWinGameRatio;
     // End of variables declaration//GEN-END:variables
 }

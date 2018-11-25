@@ -5,7 +5,7 @@
  */
 package javaprojectinterface;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 
 /**
  *
@@ -52,16 +52,41 @@ public class Leaderboard extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tic Tac Toe - Leaderbaord");
+        setPreferredSize(new java.awt.Dimension(600, 400));
 
+        leaderboardTable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         leaderboardTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
+                "Game ID", "Player 1 ", "Player 2 ", "Game Status", "Date "
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        leaderboardTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        leaderboardTable.setRowHeight(20);
+        leaderboardTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(leaderboardTable);
+        if (leaderboardTable.getColumnModel().getColumnCount() > 0) {
+            leaderboardTable.getColumnModel().getColumn(0).setMinWidth(25);
+            leaderboardTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+            leaderboardTable.getColumnModel().getColumn(1).setMinWidth(75);
+            leaderboardTable.getColumnModel().getColumn(1).setPreferredWidth(75);
+            leaderboardTable.getColumnModel().getColumn(2).setMinWidth(75);
+            leaderboardTable.getColumnModel().getColumn(2).setPreferredWidth(75);
+            leaderboardTable.getColumnModel().getColumn(3).setMinWidth(30);
+            leaderboardTable.getColumnModel().getColumn(3).setPreferredWidth(30);
+            leaderboardTable.getColumnModel().getColumn(4).setMinWidth(100);
+            leaderboardTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        }
 
         closeButton.setText("Close ");
         closeButton.setPreferredSize(new java.awt.Dimension(75, 30));
@@ -75,20 +100,20 @@ public class Leaderboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 409, Short.MAX_VALUE)
-                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 493, Short.MAX_VALUE)
+                        .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9))

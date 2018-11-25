@@ -182,7 +182,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         gameTable.setBorder(BorderFactory.createCompoundBorder());
         //gameTable.setBackground(Color.white);
         gameTable.setShowGrid(true);
-        gameTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        gameTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         gameTable.setRowSelectionAllowed(true);
         
         gameTable.addMouseListener(new MouseAdapter() {
@@ -241,15 +241,15 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         //TODO add error check + sql injection
         if (source == login) {
             userID = proxy.login(username.getText(), password.getText());
-            //if(userID > 0) {
-               // System.out.print("Successful");
+            if(userID > 0) {
+                System.out.print("Successful");
                 frame.getContentPane().removeAll();
                 gameScreen();
-            //}
-            //else{
-              //  errorMessage.setText("Login Unsuccesful");
-               // errorMessage.setForeground(Color.RED);
-           // }
+            }
+            else {
+               errorMessage.setText("Login Unsuccesful");
+                errorMessage.setForeground(Color.RED);
+           }
         }
         else if (source == loginLink) {
            frame.getContentPane().removeAll();     
@@ -289,8 +289,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             }
         }
         else if(source == scoreSystem) {
-            frame.getContentPane().removeAll();
-            // TODO create game
+            ScoreSystem scoreSystem = new ScoreSystem(loggedInUser.getText());
             scoreSystem.setVisible(true);
             
         }
