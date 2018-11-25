@@ -16,6 +16,6 @@ public class testClass {
     
     JavaProjectInterface main = new JavaProjectInterface();
     
-    JavaProjectInterface newmain = new JavaProjectInterface();
+    //JavaProjectInterface newmain = new JavaProjectInterface();
     }
 }

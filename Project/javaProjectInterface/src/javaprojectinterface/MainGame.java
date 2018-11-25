@@ -28,14 +28,18 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
     public MainGame(TTTWebService proxy, int gameID, int userID, int playerNum) {
         
         playerTurn = new Runnable() {
+            /*
+            * Thread which checks which players turn it is, if its the opposeing
+            * players turn then the thread calls a method to update the board
+            */
             public void run() {
                 while(Integer.parseInt(proxy.getGameState(gameID)) == 0 && !terminateThreads) {
                     try {
-                   Thread.currentThread().sleep(500);
-                } catch( Exception e){
-                    System.out.println(e);
-                }
-                    System.out.println("Player Turn thread sleep check");
+                        Thread.currentThread().sleep(500);
+                    } catch( Exception e){
+                        System.out.println(e);
+                    }
+                    //System.out.println("Player Turn thread sleep check");
                 String board = proxy.getBoard(gameID);
                 if(board.matches("ERROR-NOMOVES")) {
                     jLabelPlayer.setText("No move made yet");
@@ -57,6 +61,10 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         };
         
         checkWinThread = new Runnable() {
+            /*
+            * Thread which checks if the game has been won and if it has 
+            * finished it displays the winner and locks the board
+            */
             public void run() {
                 String winState = proxy.checkWin(gameID);
                 while(Integer.parseInt(winState) == 0 && !terminateThreads) {
@@ -67,6 +75,11 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                 }
                     System.out.println("win thread sleep check");
                     if(Integer.parseInt(proxy.checkWin(gameID)) != 0) {
+                        try {
+                            Thread.currentThread().sleep(1000);
+                         } catch( Exception e){
+                             System.out.println(e);
+                         }
                         winState = proxy.checkWin(gameID);
                         switch(winState) {
                             case "1":
@@ -90,32 +103,41 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         };
         
         checkPlayerJoin = new Runnable() {
-            //put in checks on integer.parseInts
-          public void run() {
-              while(gameState == -1 && !terminateThreads) {
-                  try {
-                   Thread.currentThread().sleep(1000);
-                } catch( Exception e){
-                    System.out.println(e);
-                }
-                  System.out.println("Player Join sleep check");
-                  if(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
-                      startPlayerThread();
-                      lock = false;
-                      gameState = 0;
+            /*
+            * Thread which starts on initialization of the class it checks
+            * for a player joining the game then kicks off the game by starting
+            * the other threads and unlocking the board
+            */
+            public void run() {
+                while(gameState == -1 && !terminateThreads) {
+                    try {
+                     Thread.currentThread().sleep(1000);
+                  } catch( Exception e){
+                      System.out.println(e);
                   }
-              }
-              System.out.println("Thread ended");
-          }  
-        };
+                    System.out.println("Player Join sleep check");
+                    if(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
+                        startPlayerThread();
+                        lock = false;
+                        gameState = 0;
+                    }
+                }
+                System.out.println("Thread ended");
+            }  
+          };
         
         this.playerNum = playerNum;
-        
         this.lock = true;
         this.proxy = proxy;
         this.gameID = gameID;
         this.userID = userID;
+        
         previousBoard = proxy.getBoard(gameID);
+        /*
+        * checks if the player is the first or second and sets the game state
+        * accordingly
+        */ 
+        
         if(playerNum == 1) {
             proxy.setGameState(this.gameID, -1);
             gameState = Integer.parseInt(proxy.getGameState(gameID));
@@ -123,13 +145,18 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         }
         else if(playerNum == 2) {
             proxy.setGameState(this.gameID, 0);
-            startPlayerThread();
+            new Thread(this.playerTurn).start();
             lock = false;
             gameState = 0;
         }
+        
         initComponents();
-        jLabelPlayerNum.setText("U is Playa:" + playerNum);
+        
+        jLabelPlayerNum.setText("You Are Player: " + playerNum);
+        /* terminate threads is a boolean which will kill  all threads if
+        * the window is disposed */
         terminateThreads = false;
+        
         addWindowListener(this);
         this.setTitle("Tic Tac Toe");
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
@@ -158,29 +185,33 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
     }  
     
     public void changeSquare(int x, int y) {
+        /*
+        * Method which changes the relevent square to an x or an o based on the 
+        * opponents move
+        */
         if(x == 0) {
             switch (y) {
                 case 0:
                     jPanel1.remove(jButton1);
-                     if(playerNum == 2)
-                jPanel1.add(jLabelX,0,0);
-            else
+                    if(playerNum == 2)
+                        jPanel1.add(jLabelX,0,0);
+                    else
                     jPanel1.add(jLabelO,0,0);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton2);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX1, 0, 1);
-            else 
+                        jPanel1.add(jLabelX1, 0, 1);
+                    else 
                     jPanel1.add(jLabelO1,0,1);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton3);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX2, 0, 2);
-            else 
+                        jPanel1.add(jLabelX2, 0, 2);
+                    else 
                     jPanel1.add(jLabelO2,0,2);
                     jPanel1.revalidate();
                     break;
@@ -190,24 +221,24 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                 case 0:
                     jPanel1.remove(jButton4);
                      if(playerNum == 2)
-                jPanel1.add(jLabelX4, 0, 3);
-            else 
+                        jPanel1.add(jLabelX4, 0, 3);
+                    else 
                     jPanel1.add(jLabelO3,0,3);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton5);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX5, 0, 4);
-            else 
+                        jPanel1.add(jLabelX5, 0, 4);
+                    else 
                     jPanel1.add(jLabelO4,0,4);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton6);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX3, 0, 5);
-            else 
+                        jPanel1.add(jLabelX3, 0, 5);
+                    else 
                     jPanel1.add(jLabelO5,0,5);
                     jPanel1.revalidate();
                     break;
@@ -217,24 +248,24 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                 case 0:
                     jPanel1.remove(jButton7);
                      if(playerNum == 2)
-                jPanel1.add(jLabelX8, 0, 6);
-            else 
+                        jPanel1.add(jLabelX8, 0, 6);
+                    else 
                     jPanel1.add(jLabelO6,0,6);
                     jPanel1.revalidate();
                     break;
                 case 1:
                     jPanel1.remove(jButton8);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX7, 0, 7);
-            else 
+                        jPanel1.add(jLabelX7, 0, 7);
+                    else 
                     jPanel1.add(jLabelO7,0,7);
                     jPanel1.revalidate();
                     break;
                 case 2:
                     jPanel1.remove(jButton9);
                     if(playerNum == 2)
-                jPanel1.add(jLabelX6, 0, 8);
-            else 
+                        jPanel1.add(jLabelX6, 0, 8);
+                    else 
                     jPanel1.add(jLabelO8,0,8);
                     jPanel1.revalidate();
                     break;
@@ -243,7 +274,10 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
     }
     
     public void getTurn(String[] boardArr) {
-        //TODO index out of bounds when first move
+        /*
+        * gets player turn by checking the second last turn made and if that
+        * maatches the current player ID then it unlocks the board
+        */
         if(boardArr.length > 1){
             String secondLastMove = boardArr[boardArr.length - 2];
             String[] moveArr = secondLastMove.split(",");
@@ -535,10 +569,12 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 49, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,6 +590,12 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    * The Action for each Jbutton is to set an x or o for the logged in user 
+    * when a spot is clicked it first checks with the web service then changes the 
+    * square
+    */
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(gameState == 0 && !lock) {
             checkAndTakeMove(0, 0);
