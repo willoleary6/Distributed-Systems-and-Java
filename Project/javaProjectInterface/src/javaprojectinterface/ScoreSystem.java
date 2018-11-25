@@ -5,9 +5,11 @@
  */
 package javaprojectinterface;
 
+import java.math.*;
+
 /**
  *
- * @author aaron
+ * @author Aaron
  */
 public class ScoreSystem extends javax.swing.JFrame {
     /**
@@ -20,53 +22,62 @@ public class ScoreSystem extends javax.swing.JFrame {
         int[] stats;
         int games, wins, draws, losses;
         double winGameRatio;
-        //System.out.print(user);
+        
         playerName.setText(user);
         stats = calculatePlayerStats(leagueTable);
-        System.out.printf("%s, %s, %s", stats[0], stats[1], stats[2]);
         
-        wins = stats[0];
-        draws = stats[1];
-        losses = stats[2];
-        games = (wins + draws + losses);
-        winGameRatio = (wins / games);
+        games = stats[0];
+        wins = stats[1];
+        draws = stats[2];
+        losses = stats[3];
+        System.out.print(wins + " / " + games + " = " +  (wins /games));
+        winGameRatio =  (((double) wins) / games);
                 
         numberOfGames.setText(numberOfGames.getText() + "\t "  + games);
         numberOfWins.setText(numberOfWins.getText() + "\t " + wins);
         numberOfDraws.setText(numberOfDraws.getText() + "\t " + draws);
         numberOfLosses.setText(numberOfLosses.getText() + "\t " + losses);
-        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + winGameRatio);
+        playerWinGameRatio.setText(playerWinGameRatio.getText() + "\t " + round(winGameRatio, 2));
     }
     
     public int[]  calculatePlayerStats(String leagueTable) {
-        int wins = 0, draws = 0, losses = 0, status;
-        int[] stats = {wins, draws, losses};    
-            //leagueTable =  $this->interface->getLeagueTable();
-            //$gameDetails =  explode("\n",$leagueTables);
+        int games = 0, wins = 0, draws = 0, losses = 0, status;
+        int[] stats = new int[4];
         String[] results = leagueTable.split("\n");
-        String[][] finalLeagueTable = new String [results.length][];
         
         for (String result : results) {
             String[] game = result.split(",");
             status = Integer.parseInt(game[3]);
-            if (game[1].equals(playerName.getText())) {
+            if (game[1].equals(playerName.getText()) && status != 0) {
                 switch (status) {
-                    case 1:     wins++;       break;
-                    case 2:     losses++;     break;
-                    case 3:     draws++;      break;
-                    default:                         break;
+                    case 1:     games++;    wins++;       break;
+                    case 2:     games++;    losses++;     break;
+                    case 3:     games++;    draws++;      break;
+                    default:                              break;
                 }
             }
-            else if (game[2].equals(playerName.getText())) {
+            else if (game[2].equals(playerName.getText()) && status != 0) {
                 switch (status) {
-                    case 1:     losses++;     break;
-                    case 2:     wins++;        break;
-                    case 3:     draws++;      break;
-                    default:                         break;
+                    case 1:     games++;    losses++;  break;
+                    case 2:     games++;    wins++;    break;
+                    case 3:     games++;    draws++;   break;
+                    default:                        break;
                 }
             }
         }
+        stats[0] = games; 
+        stats[1] = wins; 
+        stats[2] = draws; 
+        stats[3] = losses;
+        
         return stats;
+    }
+    
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+        BigDecimal decimal = new BigDecimal(value);
+        decimal = decimal.setScale(places, RoundingMode.HALF_UP);
+        return decimal.doubleValue();
     }
          
 
