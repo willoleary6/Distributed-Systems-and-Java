@@ -21,11 +21,8 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     private ArrayList<MainGame> games = new ArrayList<MainGame>();
     private int userID, gameID;
     private String [][]tableData;
-    //private JFrame frame;
-   // private JButton login, register, registerLink, createGame;
-    //private JTextField username, password, name, surname;
     private JLabel title, errorMessage, successLabel, loggedInUser;
-    private JFrame frame, frame2;
+    private JFrame frame;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
     private JPanel panel, panel2, gamePanel;
     private JTable leaderboardTable, gameTable;
@@ -267,9 +264,16 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             }
         }
         else if(source == scoreSystem) {
-            ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
-            scoreSystem.setVisible(true);
-            
+            if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
+                ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
+                scoreSystem.setVisible(true);
+            }
+            else {
+                JOptionPane.showMessageDialog(null,
+                        "There are no games details available to you. Please play a game to see your stats.",
+                        "No Player Statistics available ",
+                        JOptionPane.ERROR_MESSAGE);
+            }            
         }
         else if(source == leaderboard) {
            Leaderboard leaderboard = new Leaderboard(proxy.leagueTable());

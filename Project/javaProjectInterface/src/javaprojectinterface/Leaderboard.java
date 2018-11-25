@@ -6,6 +6,9 @@
 package javaprojectinterface;
 
 import javax.swing.table.*;
+// thread for leaderboard
+// dispose of window upon close
+
 
 /**
  *
@@ -123,8 +126,7 @@ public class Leaderboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        // TODO add your handling code here:
-        setVisible(false);
+       dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     /**

@@ -30,7 +30,6 @@ public class ScoreSystem extends javax.swing.JFrame {
         wins = stats[1];
         draws = stats[2];
         losses = stats[3];
-        System.out.print(wins + " / " + games + " = " +  (wins /games));
         winGameRatio =  (((double) wins) / games);
                 
         numberOfGames.setText(numberOfGames.getText() + "\t "  + games);
@@ -48,12 +47,13 @@ public class ScoreSystem extends javax.swing.JFrame {
         for (String result : results) {
             String[] game = result.split(",");
             status = Integer.parseInt(game[3]);
+            
             if (game[1].equals(playerName.getText()) && status != 0) {
                 switch (status) {
-                    case 1:     games++;    wins++;       break;
-                    case 2:     games++;    losses++;     break;
-                    case 3:     games++;    draws++;      break;
-                    default:                              break;
+                    case 1:     games++;    wins++;    break;
+                    case 2:     games++;    losses++;  break;
+                    case 3:     games++;    draws++;   break;
+                    default:                           break;
                 }
             }
             else if (game[2].equals(playerName.getText()) && status != 0) {
@@ -63,7 +63,7 @@ public class ScoreSystem extends javax.swing.JFrame {
                     case 3:     games++;    draws++;   break;
                     default:                           break;
                 }
-            }
+            }            
         }
         stats[0] = games; 
         stats[1] = wins; 
