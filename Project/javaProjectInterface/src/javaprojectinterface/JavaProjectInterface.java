@@ -17,10 +17,8 @@ import javax.swing.*;
 public class JavaProjectInterface extends JFrame implements ActionListener {
 
     private int userID;
-    private JLabel title, errorMessage;
     private JFrame frame;
     private JPanel panel;
-    private int userID, gameID;
     private JLabel title, errorMessage, successLabel, loggedInUser;
     private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
     private JTextField username, name, surname;
@@ -172,20 +170,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 setErrorMessage(result);
             }
         }
-        else if(source == createGame){
-            String result = proxy.newGame(userID);
-            try {
-                gameID = Integer.parseInt(result);
-                System.out.println("success " + gameID);
-                games.add(new MainGame(proxy, gameID, userID, 1));
-                successLabel.setText("Successfully created game");
-            } catch( Exception ex)  {
-                errorMessage.setForeground(Color.RED);
-                System.out.println(result);
-                System.out.println(username.getText());
-                setErrorMessage(result);
-            }
-        }
+       
         else if(source == scoreSystem) {
             if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
                 ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());

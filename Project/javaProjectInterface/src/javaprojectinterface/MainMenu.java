@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -472,13 +473,21 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void scoreSystemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreSystemButtonActionPerformed
-        ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
-        scoreSystem.setVisible(true);
+        if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
+                ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
+                scoreSystem.setVisible(true);
+            }
+            else {
+                JOptionPane.showMessageDialog(null,
+                        "There are no games details available to you. Please play a game to see your stats.",
+                        "No Player Statistics available ",
+                        JOptionPane.ERROR_MESSAGE);
+            }         
     }//GEN-LAST:event_scoreSystemButtonActionPerformed
 
     private void leaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaderboardButtonActionPerformed
-        Leaderboard leaderboard = new Leaderboard(proxy.leagueTable());
-        leaderboard.setVisible(true);
+       Leaderboard leaderboard = new Leaderboard(proxy, proxy.leagueTable());
+           leaderboard.setVisible(true);
     }//GEN-LAST:event_leaderboardButtonActionPerformed
 
     private void createGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createGameButtonActionPerformed
