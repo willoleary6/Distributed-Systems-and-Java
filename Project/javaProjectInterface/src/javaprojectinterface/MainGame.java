@@ -56,7 +56,6 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                     }
                
                 }
-                System.out.println("Thread ended");
             }
         };
         
@@ -115,14 +114,12 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                   } catch( Exception e){
                       System.out.println(e);
                   }
-                    System.out.println("Player Join sleep check");
                     if(Integer.parseInt(proxy.getGameState(gameID)) == 0) {
                         startPlayerThread();
                         lock = false;
                         gameState = 0;
                     }
                 }
-                System.out.println("Thread ended");
             }  
           };
         
@@ -774,12 +771,11 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-         terminateThreads = true;//To change body of generated methods, choose Tools | Templates.
-         System.out.println("method call check");
+         terminateThreads = true;
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        dispose(); //To change body of generated methods, choose Tools | Templates.
+        dispose(); 
     }
 }
