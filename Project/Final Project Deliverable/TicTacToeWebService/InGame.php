@@ -190,7 +190,7 @@
             if(userIDNumber == firstMoveUserID){
                 return "X";
             }else{
-                return "Y";
+                return "O";
             }
         }
 
