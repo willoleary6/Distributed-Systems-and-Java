@@ -46,6 +46,15 @@ public class Leaderboard extends javax.swing.JFrame {
                         }
 
                         listOfPlayers = players.split(",");
+                        String[] unique = Arrays.stream(listOfPlayers).distinct().toArray(String[]::new);
+                        for(int i =0; i < unique.length;i++)
+                            System.out.println("League table----------" + unique[i]);
+                        try{
+                            Thread.currentThread().sleep(5000);
+                                    }catch(Exception e){
+                                        
+                                    }
+                            
                         for (String p : listOfPlayers) {
                             playerStats = calculatePlayerStats(newLeaderTable, p);
                             games = playerStats[0];
