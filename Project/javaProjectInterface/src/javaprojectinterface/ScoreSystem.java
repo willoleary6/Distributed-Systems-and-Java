@@ -13,8 +13,7 @@ import java.math.*;
  */
 public class ScoreSystem extends javax.swing.JFrame {
     private int[] playerStats, stats;
-    private int games, wins, draws, losses;
-    private double winGameRatio;
+    private int games, wins, draws, losses, winGameRatio;
     private String[] results;
         
     public ScoreSystem(String leagueTable, String user) {       
@@ -27,8 +26,9 @@ public class ScoreSystem extends javax.swing.JFrame {
         wins = playerStats[1];
         draws = playerStats[2];
         losses = playerStats[3];
-        winGameRatio =  (((double) wins) / games);
-                
+        winGameRatio =  (int)((wins * 100.0f) / games);
+              
+        // Displays results in JLabels
         numberOfGames.setText(numberOfGames.getText() + "\t "  + games);
         numberOfWins.setText(numberOfWins.getText() + "\t " + wins);
         numberOfDraws.setText(numberOfDraws.getText() + "\t " + draws);
@@ -39,13 +39,16 @@ public class ScoreSystem extends javax.swing.JFrame {
     
     public int[] calculatePlayerStats(String leagueTable) {
         int gameCount = 0, winCount = 0, drawCount = 0, lossCount = 0, status;
+        
         stats = new int[4];
         results = leagueTable.split("\n");
         
+        // Selects a game from all games
         for (String result : results) {
             String[] game = result.split(",");
             status = Integer.parseInt(game[3]);
             
+            // Checkes status of game if user was Player 1
             if (game[1].equals(playerName.getText()) && status != 0) {
                 switch (status) {
                     case 1:     gameCount++;    winCount++;     break;
@@ -54,6 +57,8 @@ public class ScoreSystem extends javax.swing.JFrame {
                     default:                                    break;
                 }
             }
+            
+            // Checkes status of game if user was Player 2
             else if (game[2].equals(playerName.getText()) && status != 0) {
                 switch (status) {
                     case 1:     gameCount++;    lossCount++;    break;
@@ -71,12 +76,6 @@ public class ScoreSystem extends javax.swing.JFrame {
         return stats;
     }
     
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-        BigDecimal decimal = new BigDecimal(value);
-        decimal = decimal.setScale(places, RoundingMode.HALF_UP);
-        return decimal.doubleValue();
-    }
          
 
     /**
