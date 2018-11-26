@@ -101,12 +101,16 @@ public class MainMenu extends javax.swing.JFrame {
             * double click it gets the cell num and starts a game using the id
             */
             public void mouseClicked(MouseEvent e) {
+              //check for double click
               if (e.getClickCount() == 2) {
                 JTable target = (JTable)e.getSource();
+                //get source of click
                 int row = target.getSelectedRow();
+                //join game
                 String result = proxy.joinGame(userID, 
                         Integer.parseInt(tableOpenDataRef[row][0]));
                 if(Integer.parseInt(result) == 1)
+                    //create game Window as P2
                     games.add(new MainGame(proxy, 
                             Integer.parseInt(tableOpenDataRef[row][0]), 
                             userID, 2));
@@ -149,6 +153,7 @@ public class MainMenu extends javax.swing.JFrame {
         
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         
+        //check for a change in jtable data vs web service data
         if(previousOpenTableData.equals(unsplitTableData)) {
             String [][]tableData = new String[unsplitTableData.length][3];
             for(int i = 0; i < unsplitTableData.length;i++) {
@@ -156,15 +161,18 @@ public class MainMenu extends javax.swing.JFrame {
             for(int j = 0; j < game.length; j++)
                 tableData[i][j] = game[j];
         }
+            // assign table data to global for later reference
             tableOpenDataRef = tableData;
             for(int i = 0; i < tableData.length; i++) {
                 if(!tableData[i][1].matches(username))
+                    //add rows
                     model.addRow(new Object[]{tableData[i][0], tableData[i][1],
                         tableData[i][2]});       
             }
         } else {
             int rowCount = model.getRowCount();
             for (int i = rowCount - 1; i >= 0; i--) {
+                // remove rows
                 model.removeRow(i);
             }
             String [][]tableData = new String[unsplitTableData.length][3];
@@ -173,6 +181,7 @@ public class MainMenu extends javax.swing.JFrame {
             for(int j = 0; j < game.length; j++)
                 tableData[i][j] = game[j];
         }
+            // assign table data to global for later reference
             tableOpenDataRef = tableData;
             for(int i = 0; i < tableData.length; i++) {
                 if(!tableData[i][1].matches(username))
@@ -498,7 +507,6 @@ public class MainMenu extends javax.swing.JFrame {
                 games.add(new MainGame(proxy, gameID, userID, 1));
             } catch( Exception ex)  {
                 errorMessage.setForeground(Color.RED);
-
                 setErrorMessage(result);
             }
     }//GEN-LAST:event_createGameButtonActionPerformed

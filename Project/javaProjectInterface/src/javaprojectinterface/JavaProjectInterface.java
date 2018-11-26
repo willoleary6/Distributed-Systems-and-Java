@@ -61,14 +61,13 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        //TODO add error check + sql injection
         if (source == login) {
             frame.dispose();
-            Login login = new Login(proxy);
+            new Login(proxy);
         }
         else if (source == loginLink) {
            frame.dispose();
-           Login login = new Login(proxy);
+           new Login(proxy);
         }
         else if (source == registerLink) {
             frame.dispose();
