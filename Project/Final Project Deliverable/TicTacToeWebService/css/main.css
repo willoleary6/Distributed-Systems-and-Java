@@ -72,10 +72,10 @@ html, body {
 body {
   background: #111111;
   font-family: "metropolis-regular", sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-style: normal;
   font-weight: normal;
-  line-height: 1.765;
+  line-height: 1.4;
   color: #FFFFFF;
   margin: 0;
   padding: 0;
@@ -485,7 +485,7 @@ td:last-child {
 }
 button,
 .btn {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
 }
 
 fieldset {
