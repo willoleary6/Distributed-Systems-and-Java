@@ -38,24 +38,26 @@ public class Leaderboard extends javax.swing.JFrame {
                     leaderTable ="";
                     
                     if (!newLeaderTable.equals(leaderTable)) {
-                        results = leagueTable.split("\n");
+                        leaderTable = newLeaderTable;
+                        System.out.println(leaderTable);
+                        System.out.println("-----------------------------------------------------");
+                        System.out.println(newLeaderTable);
+                        System.out.println("-----------------------------------------------------");
+                        
+                        results = newLeaderTable.split("\n");
                         for (String result : results) {
                             String[] game = result.split(",");
-
                             players += game[1] + ","; 
                         }
-
+                        
                         listOfPlayers = players.split(",");
-                        String[] unique = Arrays.stream(listOfPlayers).distinct().toArray(String[]::new);
-                        for(int i =0; i < unique.length;i++)
-                            System.out.println("League table----------" + unique[i]);
-                        try{
-                            Thread.currentThread().sleep(5000);
-                                    }catch(Exception e){
-                                        
-                                    }
-                            
-                        for (String p : listOfPlayers) {
+                        if (listOfPlayers[0].contains("null")) {
+                            String replace = listOfPlayers[0].replace("null", "");
+                            listOfPlayers[0] = replace;
+                        }
+                        String[] uniquePlayers = Arrays.stream(listOfPlayers).distinct().toArray(String[]::new);
+                                                    
+                        for (String p : uniquePlayers) {
                             playerStats = calculatePlayerStats(newLeaderTable, p);
                             games = playerStats[0];
                             wins = playerStats[1];
@@ -65,8 +67,6 @@ public class Leaderboard extends javax.swing.JFrame {
                             table += p + "," + games + "," + wins + "," + draws + "," + losses + "," + winGameRatio + "\n";
                         }
 
-                    //if (!newLeaderTable.equals(leaderTable)) {
-                        leaderTable = newLeaderTable;
                         results = table.split("\n");
                         finalLeagueTable = new String [results.length][];
 
@@ -82,11 +82,12 @@ public class Leaderboard extends javax.swing.JFrame {
                     }
                     
                     try {
-                        Thread.currentThread().sleep(5000);
+                        Thread.currentThread().sleep(2000);
                     } catch (Exception ex) {
                         System.out.print(ex);
                     }
-                }   
+                }
+                        
             }   
         };
         initComponents();
