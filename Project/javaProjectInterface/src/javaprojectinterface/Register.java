@@ -22,6 +22,7 @@ public class Register extends javax.swing.JFrame {
         this.setTitle("Register");
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        jLabel5.setForeground(Color.RED);
     }
 
     /**
@@ -119,7 +120,9 @@ public class Register extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String result = proxy.register(jTextField1.getText(), 
+        if(!jTextField1.getText().isEmpty() && 
+                !jPasswordField1.getText().isEmpty()) {
+            String result = proxy.register(jTextField1.getText(), 
                 jPasswordField1.getText(), jTextField2.getText(), 
                 jTextField3.getText());
             try {
@@ -135,6 +138,10 @@ public class Register extends javax.swing.JFrame {
                 System.out.println(jTextField1.getText());
                 setErrorMessage(result);
             }
+        }
+        else{
+            jLabel5.setText("Must enter username and password");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void setErrorMessage (String error) {

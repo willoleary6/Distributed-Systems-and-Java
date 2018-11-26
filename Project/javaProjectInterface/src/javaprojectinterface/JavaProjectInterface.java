@@ -73,39 +73,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
             frame.dispose();
             new Register(proxy);
         }     
-       
-        else if(source == scoreSystem) {
-            if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
-                ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
-                scoreSystem.setVisible(true);
-            }
-            else {
-                JOptionPane.showMessageDialog(null,
-                        "There are no games details available to you. Please play a game to see your stats.",
-                        "No Player Statistics available ",
-                        JOptionPane.ERROR_MESSAGE);
-            }            
-        }
-        else if(source == leaderboard) {
-           Leaderboard leaderboard = new Leaderboard(proxy, proxy.leagueTable());
-           leaderboard.setVisible(true);
-            
-        }
-        else if(source == logout) {
-            int opt;
-            opt = JOptionPane.showConfirmDialog(null, "Are you sure you wish to log out?", "Log out", JOptionPane.YES_NO_OPTION);
-            
-            switch (opt) {
-                case JOptionPane.YES_OPTION:
-                    JOptionPane.showMessageDialog(null, "Successfully logged out");
-                    frame.getContentPane().removeAll();
-                    Login login = new Login(proxy);
-                    break;
-                case JOptionPane.NO_OPTION:    
-                    hide();
-                    break;
-            }
-        }
+      
     }
     
     private void setErrorMessage (String error) {

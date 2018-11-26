@@ -23,6 +23,7 @@ public class Login extends javax.swing.JFrame {
         this.setTitle("Login");
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        jLabelError.setForeground(Color.RED);
     }
 
     @SuppressWarnings("unchecked")
@@ -101,6 +102,8 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
+        if(!jTextFieldUsername.getText().isEmpty() && 
+                !jPasswordField.getText().isEmpty()) {
         int userID = proxy.login(jTextFieldUsername.getText(), jPasswordField.getText());
             
             if(userID > 0) {
@@ -110,12 +113,15 @@ public class Login extends javax.swing.JFrame {
             }
             else {
                jLabelError.setText("Login Unsuccesful");
-               jLabelError.setForeground(Color.RED);
            }
+        } else{
+            jLabelError.setText("Must enter username and password");
+        }
     }//GEN-LAST:event_jButtonLoginActionPerformed
 
     private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterActionPerformed
-        // TODO add your handling code here:
+        new Register(proxy);
+        this.dispose();
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     private void jPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldActionPerformed

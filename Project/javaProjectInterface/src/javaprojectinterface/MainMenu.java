@@ -515,7 +515,19 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_createGameButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        // TODO add your handling code here:
+        int opt;
+            opt = JOptionPane.showConfirmDialog(null, "Are you sure you wish to log out?", "Log out", JOptionPane.YES_NO_OPTION);
+            
+            switch (opt) {
+                case JOptionPane.YES_OPTION:
+                    JOptionPane.showMessageDialog(null, "Successfully logged out");
+                    new Login(proxy);
+                    this.dispose();
+                    break;
+                case JOptionPane.NO_OPTION:    
+                    hide();
+                    break;
+            }
     }//GEN-LAST:event_logoutButtonActionPerformed
 
 
