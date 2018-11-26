@@ -6,6 +6,8 @@
 package javaprojectinterface;
 
 import TTTWebApplication.TTTWebService;
+import java.math.*;
+import java.util.Arrays;
 import javax.swing.table.*;
 
 /**
@@ -13,13 +15,22 @@ import javax.swing.table.*;
  * @author Aaron
  */
 public class Leaderboard extends javax.swing.JFrame {
-    private String leaderTable, newLeaderTable;
-    private String[] results;
+    private String leaderTable, newLeaderTable, players, table;
+    private String[] results, listOfPlayers;
     private String[][] finalLeagueTable;
+    private int games, wins, draws, losses;
+    private int winGameRatio;
+    private int[] playerStats, stats;
     private DefaultTableModel model;
     public final Runnable refreshLeaderboard;
     
     public Leaderboard(TTTWebService proxy,String leagueTable) {
+        
+        /*
+        *    Thread that updates the player leaderboard as 
+        *    games are played. Each players game statistics are refreshed. 
+        */
+        
         refreshLeaderboard = new Runnable() {
             public void run() {
                 while(proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES")) {
@@ -27,9 +38,27 @@ public class Leaderboard extends javax.swing.JFrame {
                     leaderTable ="";
                     
                     if (!newLeaderTable.equals(leaderTable)) {
+                        results = leagueTable.split("\n");
+                        for (String result : results) {
+                            String[] game = result.split(",");
+
+                            players += game[1] + ","; 
+                        }
+
+                        listOfPlayers = players.split(",");
+                        for (String p : listOfPlayers) {
+                            playerStats = calculatePlayerStats(newLeaderTable, p);
+                            games = playerStats[0];
+                            wins = playerStats[1];
+                            draws = playerStats[2];
+                            losses = playerStats[3];
+                            winGameRatio = (int)((wins * 100.0f) / games);
+                            table += p + "," + games + "," + wins + "," + draws + "," + losses + "," + winGameRatio + "\n";
+                        }
+
+                    //if (!newLeaderTable.equals(leaderTable)) {
                         leaderTable = newLeaderTable;
-                        System.out.print(", In if statement");
-                        results = newLeaderTable.split("\n");
+                        results = table.split("\n");
                         finalLeagueTable = new String [results.length][];
 
                         model = new DefaultTableModel();
@@ -37,7 +66,6 @@ public class Leaderboard extends javax.swing.JFrame {
                         model.setRowCount(0);
 
                         for (int i = 0; i < results.length; i++) {
-                            System.out.print(", loop" + i);
                             String[] game = results[i].split(",");
                             finalLeagueTable[i] = game;
                             model.addRow(finalLeagueTable[i]);
@@ -49,14 +77,47 @@ public class Leaderboard extends javax.swing.JFrame {
                     } catch (Exception ex) {
                         System.out.print(ex);
                     }
-                }
-            }
+                }   
+            }   
         };
-        
         initComponents();
         startLeaderboardThread();
     }
     
+    public int[] calculatePlayerStats(String leagueTable, String player) {
+        int gameCount = 0, winCount = 0, drawCount = 0, lossCount = 0, status;
+        stats = new int[4];
+        results = leagueTable.split("\n");
+        
+        for (String result : results) {
+            String[] game = result.split(",");
+            status = Integer.parseInt(game[3]);
+            
+            if (game[1].equals(player) && status != 0) {
+                switch (status) {
+                    case 1:     gameCount++;    winCount++;     break;
+                    case 2:     gameCount++;    lossCount++;    break;
+                    case 3:     gameCount++;    drawCount++;    break;
+                    default:                                    break;
+                }
+            }
+            else if (game[2].equals(player) && status != 0) {
+                switch (status) {
+                    case 1:     gameCount++;    lossCount++;    break;
+                    case 2:     gameCount++;    winCount++;     break;
+                    case 3:     gameCount++;    drawCount++;    break;
+                    default:                                    break;
+                }
+            }            
+        }
+        stats[0] = gameCount; 
+        stats[1] = winCount; 
+        stats[2] = drawCount; 
+        stats[3] = lossCount;
+        
+        return stats;
+    }
+        
     public void startLeaderboardThread() {
         new Thread(this.refreshLeaderboard).start();
     }
@@ -88,11 +149,11 @@ public class Leaderboard extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Game ID", "Player 1 ", "Player 2 ", "Game Status", "Date "
+                "Username", "Games", "Wins", "Draws", "Losses", "Win/Game Ratio (%)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -104,16 +165,18 @@ public class Leaderboard extends javax.swing.JFrame {
         leaderboardTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(leaderboardTable);
         if (leaderboardTable.getColumnModel().getColumnCount() > 0) {
-            leaderboardTable.getColumnModel().getColumn(0).setMinWidth(25);
-            leaderboardTable.getColumnModel().getColumn(0).setPreferredWidth(25);
-            leaderboardTable.getColumnModel().getColumn(1).setMinWidth(75);
-            leaderboardTable.getColumnModel().getColumn(1).setPreferredWidth(75);
-            leaderboardTable.getColumnModel().getColumn(2).setMinWidth(75);
-            leaderboardTable.getColumnModel().getColumn(2).setPreferredWidth(75);
-            leaderboardTable.getColumnModel().getColumn(3).setMinWidth(30);
-            leaderboardTable.getColumnModel().getColumn(3).setPreferredWidth(30);
-            leaderboardTable.getColumnModel().getColumn(4).setMinWidth(100);
-            leaderboardTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+            leaderboardTable.getColumnModel().getColumn(0).setMinWidth(75);
+            leaderboardTable.getColumnModel().getColumn(0).setPreferredWidth(75);
+            leaderboardTable.getColumnModel().getColumn(1).setMinWidth(0);
+            leaderboardTable.getColumnModel().getColumn(1).setPreferredWidth(0);
+            leaderboardTable.getColumnModel().getColumn(2).setMinWidth(0);
+            leaderboardTable.getColumnModel().getColumn(2).setPreferredWidth(0);
+            leaderboardTable.getColumnModel().getColumn(3).setMinWidth(0);
+            leaderboardTable.getColumnModel().getColumn(3).setPreferredWidth(0);
+            leaderboardTable.getColumnModel().getColumn(4).setMinWidth(0);
+            leaderboardTable.getColumnModel().getColumn(4).setPreferredWidth(0);
+            leaderboardTable.getColumnModel().getColumn(5).setMinWidth(50);
+            leaderboardTable.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
 
         closeButton.setText("Close ");
@@ -133,7 +196,7 @@ public class Leaderboard extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 493, Short.MAX_VALUE)
+                        .addGap(0, 543, Short.MAX_VALUE)
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -141,7 +204,7 @@ public class Leaderboard extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9))
