@@ -24,7 +24,7 @@ public class Leaderboard extends javax.swing.JFrame {
     private DefaultTableModel model;
     public final Runnable refreshLeaderboard;
     
-    public Leaderboard(TTTWebService proxy,String leagueTable) {
+    public Leaderboard(TTTWebService proxy) {
         
         /*
         *    Thread that updates the player leaderboard as 
@@ -33,29 +33,27 @@ public class Leaderboard extends javax.swing.JFrame {
         
         refreshLeaderboard = new Runnable() {
             public void run() {
+                leaderTable ="";
                 while(proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES")) {
-                    newLeaderTable = proxy.leagueTable();                   
-                    leaderTable ="";
+                    newLeaderTable = proxy.leagueTable();                  
                     
                     if (!newLeaderTable.equals(leaderTable)) {
-                        results = leagueTable.split("\n");
+                        leaderTable = newLeaderTable;
+                        
+                        results = newLeaderTable.split("\n");
                         for (String result : results) {
                             String[] game = result.split(",");
-
                             players += game[1] + ","; 
                         }
-
+                        
                         listOfPlayers = players.split(",");
-                        String[] unique = Arrays.stream(listOfPlayers).distinct().toArray(String[]::new);
-                        for(int i =0; i < unique.length;i++)
-                            System.out.println("League table----------" + unique[i]);
-                        try{
-                            Thread.currentThread().sleep(5000);
-                                    }catch(Exception e){
-                                        
-                                    }
-                            
-                        for (String p : listOfPlayers) {
+                        if (listOfPlayers[0].contains("null")) {
+                            String replace = listOfPlayers[0].replace("null", "");
+                            listOfPlayers[0] = replace;
+                        }
+                        String[] uniquePlayers = Arrays.stream(listOfPlayers).distinct().toArray(String[]::new);
+                                                    
+                        for (String p : uniquePlayers) {
                             playerStats = calculatePlayerStats(newLeaderTable, p);
                             games = playerStats[0];
                             wins = playerStats[1];
@@ -65,32 +63,41 @@ public class Leaderboard extends javax.swing.JFrame {
                             table += p + "," + games + "," + wins + "," + draws + "," + losses + "," + winGameRatio + "\n";
                         }
 
-                    //if (!newLeaderTable.equals(leaderTable)) {
-                        leaderTable = newLeaderTable;
                         results = table.split("\n");
                         finalLeagueTable = new String [results.length][];
 
-                        model = new DefaultTableModel();
+                        //model = new DefaultTableModel();
                         model = (DefaultTableModel)leaderboardTable.getModel();
-                        model.setRowCount(0);
+                        int rowCount = model.getRowCount();
+                         for (int i = rowCount - 1; i >= 0; i--) {
+                             model.removeRow(i);
+                            }
 
                         for (int i = 0; i < results.length; i++) {
                             String[] game = results[i].split(",");
                             finalLeagueTable[i] = game;
                             model.addRow(finalLeagueTable[i]);
                         }
+                        //updateWindow();
                     }
                     
                     try {
-                        Thread.currentThread().sleep(5000);
+                        Thread.currentThread().sleep(2000);
                     } catch (Exception ex) {
                         System.out.print(ex);
                     }
-                }   
+                }
+                        
             }   
         };
         initComponents();
+        this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         startLeaderboardThread();
+    }
+    
+    public void updateWindow(){
+        this.revalidate();
+        this.repaint();
     }
     
     public int[] calculatePlayerStats(String leagueTable, String player) {
@@ -227,40 +234,7 @@ public class Leaderboard extends javax.swing.JFrame {
        dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Leaderboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Leaderboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Leaderboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Leaderboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //new Leaderboard().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;

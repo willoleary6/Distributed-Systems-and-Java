@@ -107,8 +107,7 @@ public class Login extends javax.swing.JFrame {
         int userID = proxy.login(jTextFieldUsername.getText(), jPasswordField.getText());
             
             if(userID > 0) {
-                System.out.print("Successful");
-                MainMenu menu = new MainMenu(proxy,userID, jTextFieldUsername.getText());
+                new MainMenu(proxy,userID, jTextFieldUsername.getText());
                 this.dispose();
             }
             else {

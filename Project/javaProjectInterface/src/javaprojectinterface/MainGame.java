@@ -72,7 +72,6 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                 } catch( Exception e){
                     System.out.println(e);
                 }
-                    System.out.println("win thread sleep check");
                     if(Integer.parseInt(proxy.checkWin(gameID)) != 0) {
                         try {
                             Thread.currentThread().sleep(1000);
@@ -97,7 +96,6 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
                         lock = true;
                     }
                 }
-                System.out.println("thread Finished");
             }
         };
         
@@ -474,7 +472,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
 
         jPanel1.setLayout(new java.awt.GridLayout(3, 3, 10, 10));
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Click me");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -487,7 +485,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton1);
 
-        jButton2.setText("jButton2");
+        jButton2.setText("Click me");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -495,7 +493,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton2);
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Click me");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -503,7 +501,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton3);
 
-        jButton4.setText("jButton4");
+        jButton4.setText("Click me");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -511,7 +509,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton4);
 
-        jButton5.setText("jButton5");
+        jButton5.setText("Click me");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -519,7 +517,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton5);
 
-        jButton6.setText("jButton6");
+        jButton6.setText("Click me");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -527,7 +525,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton6);
 
-        jButton7.setText("jButton7");
+        jButton7.setText("Click me");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -535,7 +533,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton7);
 
-        jButton8.setText("jButton8");
+        jButton8.setText("Click me");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -543,7 +541,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         });
         jPanel1.add(jButton8);
 
-        jButton9.setText("jButton9");
+        jButton9.setText("Click me");
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);

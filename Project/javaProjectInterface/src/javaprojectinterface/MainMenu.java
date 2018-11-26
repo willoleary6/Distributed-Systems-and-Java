@@ -58,6 +58,7 @@ public class MainMenu extends javax.swing.JFrame {
                     
                     if(!(previousOpenTableData.equals(newOpenGamesArr))) {
                         populateOpenScrollPane(newOpenGamesArr);
+                        
                     }
                     if(!(previousMyOpenTableData.equals(newMyOpenGamesArr))) {
                         populateMyOpenGamesScrollPane(newMyOpenGamesArr);
@@ -498,7 +499,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_scoreSystemButtonActionPerformed
 
     private void leaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaderboardButtonActionPerformed
-       Leaderboard leaderboard = new Leaderboard(proxy, proxy.leagueTable());
+       Leaderboard leaderboard = new Leaderboard(proxy);
            leaderboard.setVisible(true);
     }//GEN-LAST:event_leaderboardButtonActionPerformed
 
@@ -506,7 +507,6 @@ public class MainMenu extends javax.swing.JFrame {
         String result = proxy.newGame(userID);
             try {
                 int gameID = Integer.parseInt(result);
-                System.out.println("success " + gameID);
                 games.add(new MainGame(proxy, gameID, userID, 1));
             } catch( Exception ex)  {
                 errorMessage.setForeground(Color.RED);
