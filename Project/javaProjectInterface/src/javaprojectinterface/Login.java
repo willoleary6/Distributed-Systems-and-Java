@@ -105,7 +105,7 @@ public class Login extends javax.swing.JFrame {
             
             if(userID > 0) {
                 System.out.print("Successful");
-                MainMenu menu = new MainMenu(proxy,userID, jLabelUsername.getText());
+                MainMenu menu = new MainMenu(proxy,userID, jTextFieldUsername.getText());
                 this.dispose();
             }
             else {

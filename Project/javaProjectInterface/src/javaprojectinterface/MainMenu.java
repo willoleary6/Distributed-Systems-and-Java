@@ -482,8 +482,8 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void scoreSystemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreSystemButtonActionPerformed
-        if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
-                ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), loggedInUser.getText());
+        if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(username)) {
+                ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), username);
                 scoreSystem.setVisible(true);
             }
             else {
@@ -491,7 +491,10 @@ public class MainMenu extends javax.swing.JFrame {
                         "There are no games details available to you. Please play a game to see your stats.",
                         "No Player Statistics available ",
                         JOptionPane.ERROR_MESSAGE);
-            }         
+            }   
+        /*System.out.println("username-----" + username);
+        ScoreSystem scoreSystem = new ScoreSystem(proxy.leagueTable(), username);
+                scoreSystem.setVisible(true);*/
     }//GEN-LAST:event_scoreSystemButtonActionPerformed
 
     private void leaderboardButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaderboardButtonActionPerformed

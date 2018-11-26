@@ -172,6 +172,7 @@ public class MainGame extends javax.swing.JFrame implements WindowListener {
         proxy.setGameState(this.gameID, state);
     }
     
+    
     public void updateBoard(String[] board) {
         for(int i = 0; i < board.length; i++) {
             String[] move = board[i].split(",");

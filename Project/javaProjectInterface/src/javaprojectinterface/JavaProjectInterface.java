@@ -71,7 +71,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         }
         else if (source == registerLink) {
             frame.dispose();
-            Register register = new Register(proxy);
+            new Register(proxy);
         }     
        
         else if(source == scoreSystem) {
