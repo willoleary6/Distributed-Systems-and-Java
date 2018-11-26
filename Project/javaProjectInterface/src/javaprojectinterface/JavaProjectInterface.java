@@ -16,13 +16,10 @@ import javax.swing.*;
  */
 public class JavaProjectInterface extends JFrame implements ActionListener {
 
-    private int userID;
     private JFrame frame;
     private JPanel panel;
-    private JLabel title, errorMessage, successLabel, loggedInUser;
-    private JButton login, register, registerLink, loginLink, logout, leaderboard, createGame, scoreSystem;
-    private JTextField username, name, surname;
-    private JPasswordField password;
+    private JLabel title, errorMessage, loggedInUser;
+    private JButton login, registerLink, loginLink, logout, leaderboard, scoreSystem;
 
     TTTWebService_Service link;
     TTTWebService proxy;
@@ -31,8 +28,6 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
     public JavaProjectInterface() {         
         link = new TTTWebService_Service();
         proxy = link.getTTTWebServicePort();
-        
-        System.out.println(proxy.test());
         
         title = new JLabel("Tic Tac Toe", SwingConstants.CENTER);
         title.setBounds(0, 20, 300, 20);
@@ -62,114 +57,23 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
         frame.setVisible(true);
     }
     
-    public void login() {
-        username = new JTextField(20);
-        password = new JPasswordField(20);
-        errorMessage = new JLabel("");
-        
-        login = new JButton("Login");
-        login.addActionListener(this);
-        
-        registerLink = new JButton("Register");
-        registerLink.addActionListener(this);
-        
-        panel = new JPanel();
-        panel.setLayout(new GridLayout(4,2));
-        panel.setBackground(Color.white);
-        frame.getContentPane().add(panel);
-        panel.add(new JLabel("Username:"));
-        panel.add(username);
-        panel.add(new JLabel("Password:"));
-        panel.add(password);
-        panel.add(login);
-        panel.add(registerLink);
-        panel.add(errorMessage);
-        
-        frame.setTitle("Tic Tac Toe - Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setVisible(true);
-    }
-    
-    public void register() {
-        username = new JTextField(20);
-        password = new JPasswordField(20);
-        name = new JTextField(20);
-        surname = new JTextField(20);
-        errorMessage = new JLabel("");
-        register = new JButton("Register");
-        register.addActionListener(this);
-        loginLink = new JButton("Login");
-        loginLink.addActionListener(this);
-        
-        panel = new JPanel();
-        panel.setLayout(new GridLayout(6,2));
-        panel.setBackground(Color.white);
-        frame.getContentPane().add(panel);
-        panel.add(new JLabel("Username:"));
-        panel.add(username);
-        panel.add(new JLabel("Password:"));
-        panel.add(password);
-        panel.add(new JLabel("Name:"));
-        panel.add(name);
-        panel.add(new JLabel("Surname:"));
-        panel.add(surname);
-        panel.add(register);
-        panel.add(loginLink);
-        panel.add(new JLabel(""));
-        panel.add(errorMessage);
-        
-        frame.setTitle("Tic Tac Toe - Register");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setVisible(true);
-    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         //TODO add error check + sql injection
         if (source == login) {
-            userID = proxy.login(username.getText(), password.getText());
-            
-            if(userID > 0) {
-                System.out.print("Successful");
-                frame.getContentPane().removeAll();
-                frame.setVisible(false);
-                MainMenu menu = new MainMenu(proxy,userID, username.getText());
-            }
-            else {
-               errorMessage.setText("Login Unsuccesful");
-                errorMessage.setForeground(Color.RED);
-           }
+            frame.dispose();
+            Login login = new Login(proxy);
         }
         else if (source == loginLink) {
-           frame.getContentPane().removeAll();     
-            login();
+           frame.dispose();
+           Login login = new Login(proxy);
         }
         else if (source == registerLink) {
-                frame.getContentPane().removeAll();
-                register();
-        }
-        else if (source == register) {
-            String result = proxy.register(username.getText(), password.getText(),
-            name.getText(), surname.getText());
-            try {
-                userID = Integer.parseInt(result);
-                System.out.println("success " + userID);
-                frame.getContentPane().removeAll();
-                frame.setVisible(false);
-                MainMenu menu = new MainMenu(proxy,userID, username.getText());
-
-            } catch( Exception ex)  {
-                errorMessage.setForeground(Color.RED);
-                System.out.println(result);
-                System.out.println(username.getText());
-                setErrorMessage(result);
-            }
-        }
+            frame.dispose();
+            Register register = new Register(proxy);
+        }     
        
         else if(source == scoreSystem) {
             if (proxy.leagueTable() != null && !proxy.leagueTable().equals("ERROR-NOGAMES") && proxy.leagueTable().contains(loggedInUser.getText())) {
@@ -196,7 +100,7 @@ public class JavaProjectInterface extends JFrame implements ActionListener {
                 case JOptionPane.YES_OPTION:
                     JOptionPane.showMessageDialog(null, "Successfully logged out");
                     frame.getContentPane().removeAll();
-                    login();
+                    Login login = new Login(proxy);
                     break;
                 case JOptionPane.NO_OPTION:    
                     hide();
